@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="q.png" type="image/x-icon" />
+
+    <title>Inicio</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="/inicio" class="site_title">
+                            <img src="q.png" alt="Q">
+                            <span>Reports Logs</span>
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <br />
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <div id="vinetas">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </div>
+                        <div class="pull-right">
+                            <button type="button" data-toggle="modal" class="btn btn-danger" id="logout">
+                                <span class="fa fa-sign-out"></span> Cerrar Sesión
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h3>Reportes</h3>
+
+                            </div>
+                            <div class="x_content">
+                                <div class="row">
+                                    <form id="log">
+                                        <div class="col-md-4">
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Activity Date</label>
+                                                    <input type=text name='act_date' placeholder="Activity Date" class="form-control"
+                                                        id="act_date" aria-describedby="inputSuccess2Status">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Part</label>
+                                                    <select name='part' class="form-control" id="select_part"></select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Color</label>
+                                                    <input type="text" name='color' class="form-control" id="color">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Lot Number</label>
+                                                    <input type="text" name='lot_number' class="form-control" id="select_part">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Serial Number</label>
+                                                    <input type="text" name='serial_number' class="form-control" id="SN">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Select Worker</label>
+                                                    <select name='select_worker' class="form-control" id="select_worker">
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Pieces/Boxes</label>
+                                                    <input type="number" min="0" name='pcs' class="form-control" id="pcs">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Qty of Boxes</label>
+                                                    <input type="number" min="0" name='qty_boxes' class="form-control"
+                                                        id="qty_boxes">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>OK Pieces</label>
+                                                    <input type="number" min="0" name='ok_pieces' class="form-control"
+                                                        id="ok_pieces">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Pending Pieces</label>
+                                                    <input type="number" min="0" name='pending_pieces' class="form-control"
+                                                        id="pending_pieces">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>Hours Invested</label>
+                                                    <input type="number" min="0" name='hours_invested' class="form-control"
+                                                        id="hours_invested">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_1</label>
+                                                    <input type="number" min="0" name='ng_1' class="form-control" id="ng1">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_2</label>
+                                                    <input type="number" name='ng_2' min="0" class="form-control" id="ng2">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_3</label>
+                                                    <input type="number" name='ng_3' min="0" class="form-control" id="ng3">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_4</label>
+                                                    <input type="number" name='ng_4' min="0" class="form-control" id="ng4">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_5</label>
+                                                    <input type="number" name='ng_5' min="0" class="form-control" id="ng5">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_6</label>
+                                                    <input type="number" name='ng_6' min="0" class="form-control" id="ng6">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_7</label>
+                                                    <input type="number" min="0" name='ng_7' class="form-control" id="ng7">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <label>NG_8</label>
+                                                    <input type="number" min="0" name='ng_8' class="form-control" id="ng8">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-danger" id="addLog">
+                                        <span class="fa fa-sign-out"></span> Add Log
+                                    </button>
+                                </div>
+                                <table id="logs" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="3">Item</th>
+                                            <th rowspan="3">Activity Date</th>
+                                            <th rowspan="3">Part Number</th>
+                                            <th rowspan="3">Part Name</th>
+                                            <th rowspan="3">Color</th>
+                                            <th rowspan="3">Lot Number</th>
+                                            <th rowspan="3"> Serial Number</th>
+                                            <th rowspan="3">Pieces/Box</th>
+                                            <th rowspan="3">Quantity of Boxes</th>
+                                            <td colspan="12">Quantity</td>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="2">OK</th>
+                                            <th rowspan="2">Pending</th>
+                                            <td colspan="6">NG (Defect Types)</td>
+                                            <th rowspan="2">Total</th>
+                                            <td colspan="2">Rework</td>
+                                            <th rowspan="2">Hours Invested</th>
+                                        </tr>
+                                        <tr>
+
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+                                            <th>4</th>
+                                            <th>5</th>
+                                            <th>6</th>
+                                            <th>7</th>
+                                            <th>8</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    QMC 2018 &copy;
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Moment -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <!-- Datetimepicker -->
+    <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Datatables -->
+    <script src="../vendors/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendors/datatables.net/js/dataTables.altEditor.free.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+    <script src="../build/js/scripts.js"></script>
+
+    <script>
+        initRerportsLog();
+    </script>
+
+</body>
+
+</html>
