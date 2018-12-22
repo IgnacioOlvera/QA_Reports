@@ -70,11 +70,21 @@ api.get('/getngparts', function (req, res) {
 //Piezas NG y OK ordenadas por fecha de cliente
 api.get('/getokandngparts', function (req, res) {
     //Recibir Token hasheado
-    con.query(`select  date_format(act_date, '%m-%Y'),p.name , ok_pcs ok,ng_1 + ng_2 + ng_3 + ng_4 + ng_5 + ng_6 + ng_7 + ng_8 ng, pending_pcs pending from logs join (select * from reports where fk_customer = 1) r on fk_report = r._id join parts p on r.fk_part = p._id order by  date_format(act_date, '%m-%Y');`, function (err, data) {
+    con.query(`select p.name part_name, sum(ok_pcs) ok,sum(ng_1 + ng_2 + ng_3 + ng_4 + ng_5 + ng_6 + ng_7 + ng_8) ng, sum(pending_pcs) pending from logs join (select * from reports where fk_customer = 1) r on fk_report = r._id join parts p on r.fk_part = p._id group by p.name;`, function (err, data) {
         if (err) throw err
         else
             res.send(data);
     });
 });
+
+//Piezas Inspeccionadas por empleado
+api.get('/pcsperworker', function (req, res) {
+    con.query(`select workers.first_name, sum(ok_pcs + ng_1 + ng_2 + ng_3 + ng_4 + ng_5 + ng_6 + ng_7 + ng_8 + pending_pcs) total from logs join workers on logs.fk_worker = workers._id group by workers.first_name;`, function (err, data) {
+        if(err) throw err
+        else
+            res.send(data);
+    });
+
+})
 
 module.exports = api;

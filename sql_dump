@@ -1,0 +1,184 @@
+-- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
+--
+-- Host: 127.0.0.1    Database: reportes
+-- ------------------------------------------------------
+-- Server version	5.7.24-0ubuntu0.18.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `customers`
+--
+
+DROP TABLE IF EXISTS `customers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customers` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `rfc` varchar(16) DEFAULT NULL,
+  `pass` varchar(8) DEFAULT NULL,
+  `hashed_pass` tinytext,
+  `type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customers`
+--
+
+LOCK TABLES `customers` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (1,'Cliente Agregadorrr','12342fSDrfdssd','rIoUWjjX','$2a$10$xmEDPuKJETInQ3Xt.LLmVuj5YC2Zbd0r9MNNt.8Bp4hv.Aish3nvq',0),(2,'Cliente 3','sfgsf3wrer43','3gRobnmY','$2a$10$BKDXQ9TDzbqTo481gXOSDuGglDtJvbm7cAVih5yJPeAZafmVPvk82',1);
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `logs`
+--
+
+DROP TABLE IF EXISTS `logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `logs` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_report` int(11) DEFAULT NULL,
+  `act_date` date DEFAULT NULL,
+  `fk_part` int(11) DEFAULT NULL,
+  `color` varchar(15) DEFAULT NULL,
+  `lot_number` varchar(20) DEFAULT NULL,
+  `serial_number` varchar(20) DEFAULT NULL,
+  `pcs` int(11) DEFAULT NULL,
+  `boxes_qty` int(11) DEFAULT NULL,
+  `ok_pcs` int(11) DEFAULT NULL,
+  `pending_pcs` int(11) DEFAULT NULL,
+  `work_hours` float DEFAULT NULL,
+  `ng_1` int(11) DEFAULT NULL,
+  `ng_2` int(11) DEFAULT NULL,
+  `ng_3` int(11) DEFAULT NULL,
+  `ng_4` int(11) DEFAULT NULL,
+  `ng_5` int(11) DEFAULT NULL,
+  `ng_6` int(11) DEFAULT NULL,
+  `ng_7` int(11) DEFAULT NULL,
+  `ng_8` int(11) DEFAULT NULL,
+  `fk_worker` int(11) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `logs`
+--
+
+LOCK TABLES `logs` WRITE;
+/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
+INSERT INTO `logs` VALUES (23,5,'2018-12-18',1,'ñlkj','ñlkj','ñlkj',654,534,654,654,65,321,45,6,8,9,7,5,3,4),(24,5,'2018-12-18',2,'ñlkj','ñlkj','ñlkj',654,534,654,654,65,321,45,6,8,9,7,5,3,4),(25,5,'2018-12-18',1,'kjhk','hjklh','lkjh',654,654,654,654,65,321897,987,987,987,987,987,987,987,2),(26,5,'2018-12-19',1,'jjj','jljh','jlj',654,654,654,654,64,654,654,654,654,654,654,654,654,2),(27,5,'2018-12-19',1,'jjj','jkj','lkjkl',68,654,654,654,654,654,654,654,654,654,654,654,654,2),(28,8,'2018-12-20',1,'lkjl','ljñlk','lkjl',654,654,654,654,654,654,654,65,654,654,654,654,654,2),(29,8,'2018-12-12',1,'lknln','ñlnñl','ñlknñl',654,654,654,654,65,654,654,654,98,4,654,654,654,2),(30,8,'2018-12-12',1,'kjhkjh','ñjh','ñjhñkj',9465,654,654,654,654,0,0,654,0,654,0,654,0,2),(31,9,'2018-12-20',1,'llñkj','lkjlk','ñlkjñlk',654,654,654,654,654,651,1,165,0,654,0,56,0,2),(32,9,'2018-12-06',1,'kjklh','kjkjh','kjhkj',54,654,65,654,654,0,5,665,0,654,65,0,40,2),(33,10,'2018-12-20',1,'kjñlj','ñlkj','ñlkj',654,654,654,65,651,98,0,0,0,0,65,0,0,2),(34,10,'2018-12-14',1,'kjn','651','651',56,651,651,651,651,651,651,651,651,651,561,651,651,2),(35,10,'2018-12-25',1,'lkñlj','lkj','lk',456,654,654,654,654,654,654,65,654,654,654,654,654,2);
+/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `parts`
+--
+
+DROP TABLE IF EXISTS `parts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `parts` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `part_number` varchar(15) DEFAULT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `description` tinytext,
+  `fk_customer` int(11) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `parts`
+--
+
+LOCK TABLES `parts` WRITE;
+/*!40000 ALTER TABLE `parts` DISABLE KEYS */;
+INSERT INTO `parts` VALUES (1,'rrrr','Parte Editada','ggggg',2),(2,'ffff','dddd','ppppp',1);
+/*!40000 ALTER TABLE `parts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reports`
+--
+
+DROP TABLE IF EXISTS `reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reports` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `serviceName` varchar(30) DEFAULT NULL,
+  `invoice` varchar(20) DEFAULT NULL,
+  `fk_part` int(11) DEFAULT NULL,
+  `job_inspection` int(11) DEFAULT NULL,
+  `job_rework` int(11) DEFAULT NULL,
+  `job_sampling` int(11) DEFAULT NULL,
+  `job_partial_rework` int(11) DEFAULT NULL,
+  `fk_customer` int(11) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `finish_date` date DEFAULT NULL,
+  `status` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reports`
+--
+
+LOCK TABLES `reports` WRITE;
+/*!40000 ALTER TABLE `reports` DISABLE KEYS */;
+INSERT INTO `reports` VALUES (5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2,'2018-11-18','2018-11-25','1'),(8,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2018-11-18','2018-11-25','1'),(9,'Juan Perez QMC','6546fdf',1,50,34,55,54,1,'2018-12-12','2018-12-10','1'),(10,'ffff','alndf,n',1,44,55,55,44,1,'2018-12-17','2018-12-24','1');
+/*!40000 ALTER TABLE `reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workers`
+--
+
+DROP TABLE IF EXISTS `workers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `workers` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(30) DEFAULT NULL,
+  `last_name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workers`
+--
+
+LOCK TABLES `workers` WRITE;
+/*!40000 ALTER TABLE `workers` DISABLE KEYS */;
+INSERT INTO `workers` VALUES (2,'Empleado','Apellido'),(4,'ddd','ddd'),(5,'gggg','ggggg');
+/*!40000 ALTER TABLE `workers` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-12-22 13:20:04
