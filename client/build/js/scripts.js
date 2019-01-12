@@ -1,331 +1,329 @@
 $('#vinetas').html(`<ul class="nav side-menu"> <li> <a href='/home'> <i class="fa fa-home"></i> Inicio </a> </li> <li> <a href='/report'> <i class="fa fa-list-ul"></i> Reportes </a> </li><li> <a href='/client'> <i class="fa fa-industry"></i> Clientes </a> </li><li> <a href='/parts'> <i class="fa fa-wrench"></i> Partes </a> </li><li> <a href='/operators'> <i class="fa fa-users"></i> Empleados </a> </li></ul> `);
 
 $('#logout').on('click', function () {
-    setCookie('authorization', "");
     localStorage.clear();
     window.location.replace("/login");
 });
-function initInicio() {
-    inspected_parts_by_worker
-    $.ajax({
-        url: "/pcsperworker",
-        type: 'GET',
-        success: function (data) {
-            // based on prepared DOM, initialize echarts instance
-            let workers_graph = echarts.init(document.getElementById('inspected_parts_by_worker'));
-            // specify chart configuration item and data
-            let workers = [], total = [], values = [];
-            for (let index = 0; index < data.length; index++) {
-                const record = data[index];
-                workers.push(record.first_name)
-                values.push({
-                    name: record.first_name,
-                    type: 'bar',
-                    data: [record.total],
-                    label: {
-                        show: true,
-                        position: 'inside',
-                        fontStyle: 'italic'
-                    }
-                });
-            }
-            let workers_option = {
-                title: {
-                    text: 'Número de Partes Inspeccionadas por Operario'
-                }, tooltip: {
-                    trigger: 'axis'
-                },
-                toolbox: {
-                    feature: {
-                        dataView: {
-                            show: true, readOnly: false,
-                            title: "Ver Info",
-                            lang: [
-                                "Información en Texto Plano",
-                                "Cerrar",
-                                "Actualizar"
-                            ]
-                        },
-                        magicType: { show: true, type: 'line' },
-                        saveAsImage: { show: true, title: "Descargar Imágen" }
-                    }
-                },
-                legend: {
-                    data: workers
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: ['Total de Partes Inspeccionadas'],
-                        axisPointer: {
-                            type: 'shadow'
-                        }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'Cantidad'
-                    }
-                ],
-                series: values
-            };
-            // use configuration item and data specified to show chart
-            workers_graph.setOption(workers_option);
-        },
-        failure: function (result) {
-            $.notify("Ha ocurrido un Error");
-        },
-        error: function (result) {
-            $.notify("Ha ocurrido un Error");
-        }
-    });
-    $.ajax({
-        url: "/getokandngparts",
-        type: 'GET',
-        success: function (data) {
-            // based on prepared DOM, initialize echarts instance
-            let ok_graph = echarts.init(document.getElementById('ok_graph'));
-            // specify chart configuration item and data
-            let ok = [], ng = [], pending = [], partes = [];
-            for (let index = 0; index < data.length; index++) {
-                const record = data[index];
-                if (partes.indexOf(record.part_name) == -1) {
-                    partes.push(record.part_name);
-                }
-                ok.push(record.ok);
-                ng.push(record.ng);
-                pending.push(record.pending);
-            }
-            let ok_option = {
-                title: {
-                    text: 'Partes con Defectos'
-                }, tooltip: {
-                    trigger: 'axis'
-                },
-                toolbox: {
-                    feature: {
-                        dataView: {
-                            show: true, readOnly: false,
-                            title: "Ver Info",
-                            lang: [
-                                "Información en Texto Plano",
-                                "Cerrar",
-                                "Actualizar"
-                            ]
-                        },
-                        magicType: { show: true, type: 'line' },
-                        saveAsImage: { show: true, title: "Descargar Imágen" }
-                    }
-                },
-                legend: {
-                    data: ['OK', 'NG', 'Pending']
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: partes,
-                        axisPointer: {
-                            type: 'shadow'
-                        }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'Cantidad'
-                    }
-                ],
-                series: [
-                    {
-                        name: 'OK',
-                        type: 'bar',
-                        data: ok,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG',
-                        type: 'bar',
-                        data: ng,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'Pending',
-                        type: 'bar',
-                        data: pending,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }
-                ]
-            };
-            // use configuration item and data specified to show chart
-            ok_graph.setOption(ok_option);
-        },
-        failure: function (result) {
-            $.notify("Ha ocurrido un Error");
-        },
-        error: function (result) {
-            $.notify("Ha ocurrido un Error");
-        }
-    });
-    $.ajax({
-        url: "/getngparts",
-        type: 'GET',
-        success: function (data) {
-            // based on prepared DOM, initialize echarts instance
-            let ng_graph = echarts.init(document.getElementById('ng_graph'));
-            // specify chart configuration item and data
-            let ng1 = [], ng2 = [], ng3 = [], ng4 = [], ng5 = [], ng6 = [], ng7 = [], ng8 = [], partes = [];
-            for (let index = 0; index < data.length; index++) {
-                const record = data[index];
-                if (partes.indexOf(record.part_name) == -1) {
-                    partes.push(record.part_name);
-                }
-                ng1.push(record.ng1);
-                ng2.push(record.ng2);
-                ng3.push(record.ng3);
-                ng4.push(record.ng4);
-                ng5.push(record.ng5);
-                ng6.push(record.ng6);
-                ng7.push(record.ng7);
-                ng8.push(record.ng8);
+// function initInicio() {
+//     // $.ajax({
+//     //     url: "/pcsperworker",
+//     //     type: 'GET',
+//     //     success: function (data) {
+//     //         // based on prepared DOM, initialize echarts instance
+//     //         let workers_graph = echarts.init(document.getElementById('inspected_parts_by_worker'));
+//     //         // specify chart configuration item and data
+//     //         let workers = [], total = [], values = [];
+//     //         for (let index = 0; index < data.length; index++) {
+//     //             const record = data[index];
+//     //             workers.push(record.first_name)
+//     //             values.push({
+//     //                 name: record.first_name,
+//     //                 type: 'bar',
+//     //                 data: [record.total],
+//     //                 label: {
+//     //                     show: true,
+//     //                     position: 'inside',
+//     //                     fontStyle: 'italic'
+//     //                 }
+//     //             });
+//     //         }
+//     //         let workers_option = {
+//     //             title: {
+//     //                 text: 'Número de Partes Inspeccionadas por Operario'
+//     //             }, tooltip: {
+//     //                 trigger: 'axis'
+//     //             },
+//     //             toolbox: {
+//     //                 feature: {
+//     //                     dataView: {
+//     //                         show: true, readOnly: false,
+//     //                         title: "Ver Info",
+//     //                         lang: [
+//     //                             "Información en Texto Plano",
+//     //                             "Cerrar",
+//     //                             "Actualizar"
+//     //                         ]
+//     //                     },
+//     //                     magicType: { show: true, type: 'line' },
+//     //                     saveAsImage: { show: true, title: "Descargar Imágen" }
+//     //                 }
+//     //             },
+//     //             legend: {
+//     //                 data: workers
+//     //             },
+//     //             xAxis: [
+//     //                 {
+//     //                     type: 'category',
+//     //                     data: ['Total de Partes Inspeccionadas'],
+//     //                     axisPointer: {
+//     //                         type: 'shadow'
+//     //                     }
+//     //                 }
+//     //             ],
+//     //             yAxis: [
+//     //                 {
+//     //                     type: 'value',
+//     //                     name: 'Cantidad'
+//     //                 }
+//     //             ],
+//     //             series: values
+//     //         };
+//     //         // use configuration item and data specified to show chart
+//     //         workers_graph.setOption(workers_option);
+//     //     },
+//     //     failure: function (result) {
+//     //         $.notify("Ha ocurrido un Error");
+//     //     },
+//     //     error: function (result) {
+//     //         $.notify("Ha ocurrido un Error");
+//     //     }
+//     // });
+//     // $.ajax({
+//     //     url: "/getokandngparts",
+//     //     type: 'GET',
+//     //     success: function (data) {
+//     //         // based on prepared DOM, initialize echarts instance
+//     //         let ok_graph = echarts.init(document.getElementById('ok_graph'));
+//     //         // specify chart configuration item and data
+//     //         let ok = [], ng = [], pending = [], partes = [];
+//     //         for (let index = 0; index < data.length; index++) {
+//     //             const record = data[index];
+//     //             if (partes.indexOf(record.part_name) == -1) {
+//     //                 partes.push(record.part_name);
+//     //             }
+//     //             ok.push(record.ok);
+//     //             ng.push(record.ng);
+//     //             pending.push(record.pending);
+//     //         }
+//     //         let ok_option = {
+//     //             title: {
+//     //                 text: 'Partes con Defectos'
+//     //             }, tooltip: {
+//     //                 trigger: 'axis'
+//     //             },
+//     //             toolbox: {
+//     //                 feature: {
+//     //                     dataView: {
+//     //                         show: true, readOnly: false,
+//     //                         title: "Ver Info",
+//     //                         lang: [
+//     //                             "Información en Texto Plano",
+//     //                             "Cerrar",
+//     //                             "Actualizar"
+//     //                         ]
+//     //                     },
+//     //                     magicType: { show: true, type: 'line' },
+//     //                     saveAsImage: { show: true, title: "Descargar Imágen" }
+//     //                 }
+//     //             },
+//     //             legend: {
+//     //                 data: ['OK', 'NG', 'Pending']
+//     //             },
+//     //             xAxis: [
+//     //                 {
+//     //                     type: 'category',
+//     //                     data: partes,
+//     //                     axisPointer: {
+//     //                         type: 'shadow'
+//     //                     }
+//     //                 }
+//     //             ],
+//     //             yAxis: [
+//     //                 {
+//     //                     type: 'value',
+//     //                     name: 'Cantidad'
+//     //                 }
+//     //             ],
+//     //             series: [
+//     //                 {
+//     //                     name: 'OK',
+//     //                     type: 'bar',
+//     //                     data: ok,
+//     //                     label: {
+//     //                         show: true,
+//     //                         position: 'inside',
+//     //                         fontStyle: 'italic'
+//     //                     }
+//     //                 }, {
+//     //                     name: 'NG',
+//     //                     type: 'bar',
+//     //                     data: ng,
+//     //                     label: {
+//     //                         show: true,
+//     //                         position: 'inside',
+//     //                         fontStyle: 'italic'
+//     //                     }
+//     //                 }, {
+//     //                     name: 'Pending',
+//     //                     type: 'bar',
+//     //                     data: pending,
+//     //                     label: {
+//     //                         show: true,
+//     //                         position: 'inside',
+//     //                         fontStyle: 'italic'
+//     //                     }
+//     //                 }
+//     //             ]
+//     //         };
+//     //         // use configuration item and data specified to show chart
+//     //         ok_graph.setOption(ok_option);
+//     //     },
+//     //     failure: function (result) {
+//     //         $.notify("Ha ocurrido un Error");
+//     //     },
+//     //     error: function (result) {
+//     //         $.notify("Ha ocurrido un Error");
+//     //     }
+//     // });
+//     $.ajax({
+//         url: "/getngparts",
+//         type: 'GET',
+//         success: function (data) {
+//             // based on prepared DOM, initialize echarts instance
+//             let ng_graph = echarts.init(document.getElementById('ng_graph'));
+//             // specify chart configuration item and data
+//             let ng1 = [], ng2 = [], ng3 = [], ng4 = [], ng5 = [], ng6 = [], ng7 = [], ng8 = [], partes = [];
+//             for (let index = 0; index < data.length; index++) {
+//                 const record = data[index];
+//                 if (partes.indexOf(record.part_name) == -1) {
+//                     partes.push(record.part_name);
+//                 }
+//                 ng1.push(record.ng1);
+//                 ng2.push(record.ng2);
+//                 ng3.push(record.ng3);
+//                 ng4.push(record.ng4);
+//                 ng5.push(record.ng5);
+//                 ng6.push(record.ng6);
+//                 ng7.push(record.ng7);
+//                 ng8.push(record.ng8);
 
-            }
-            let ng_option = {
-                title: {
-                    text: 'Partes con Defectos'
-                }, tooltip: {
-                    trigger: 'axis'
-                },
-                toolbox: {
-                    feature: {
-                        dataView: {
-                            show: true, readOnly: false,
-                            title: "Ver Info",
-                            lang: [
-                                "Información en Texto Plano",
-                                "Cerrar",
-                                "Actualizar"
-                            ]
-                        },
-                        magicType: { show: true, type: 'line' },
-                        saveAsImage: { show: true, title: "Descargar Imágen" }
-                    }
-                },
-                legend: {
-                    data: ['NG1', 'NG2', 'NG3', 'NG4', 'NG5', 'NG6', 'NG7', 'NG8',]
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: partes,
-                        axisPointer: {
-                            type: 'shadow'
-                        }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'Cantidad'
-                    }
-                ],
-                series: [
-                    {
-                        name: 'NG1',
-                        type: 'bar',
-                        data: ng1,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG2',
-                        type: 'bar',
-                        data: ng2,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG3',
-                        type: 'bar',
-                        data: ng3,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG4',
-                        type: 'bar',
-                        data: ng4,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG5',
-                        type: 'bar',
-                        data: ng5,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG6',
-                        type: 'bar',
-                        data: ng6,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG7',
-                        type: 'bar',
-                        data: ng7,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }, {
-                        name: 'NG8',
-                        type: 'bar',
-                        data: ng8,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            fontStyle: 'italic'
-                        }
-                    }
-                ]
-            };
-            // use configuration item and data specified to show chart
-            ng_graph.setOption(ng_option);
-        },
-        failure: function (result) {
-            $.notify("Ha ocurrido un Error");
-        },
-        error: function (result) {
-            $.notify("Ha ocurrido un Error");
-        }
-    });
-}
+//             }
+//             let ng_option = {
+//                 title: {
+//                     text: 'Partes con Defectos'
+//                 }, tooltip: {
+//                     trigger: 'axis'
+//                 },
+//                 toolbox: {
+//                     feature: {
+//                         dataView: {
+//                             show: true, readOnly: false,
+//                             title: "Ver Info",
+//                             lang: [
+//                                 "Información en Texto Plano",
+//                                 "Cerrar",
+//                                 "Actualizar"
+//                             ]
+//                         },
+//                         magicType: { show: true, type: 'line' },
+//                         saveAsImage: { show: true, title: "Descargar Imágen" }
+//                     }
+//                 },
+//                 legend: {
+//                     data: ['NG1', 'NG2', 'NG3', 'NG4', 'NG5', 'NG6', 'NG7', 'NG8',]
+//                 },
+//                 xAxis: [
+//                     {
+//                         type: 'category',
+//                         data: partes,
+//                         axisPointer: {
+//                             type: 'shadow'
+//                         }
+//                     }
+//                 ],
+//                 yAxis: [
+//                     {
+//                         type: 'value',
+//                         name: 'Cantidad'
+//                     }
+//                 ],
+//                 series: [
+//                     {
+//                         name: 'NG1',
+//                         type: 'bar',
+//                         data: ng1,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG2',
+//                         type: 'bar',
+//                         data: ng2,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG3',
+//                         type: 'bar',
+//                         data: ng3,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG4',
+//                         type: 'bar',
+//                         data: ng4,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG5',
+//                         type: 'bar',
+//                         data: ng5,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG6',
+//                         type: 'bar',
+//                         data: ng6,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG7',
+//                         type: 'bar',
+//                         data: ng7,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }, {
+//                         name: 'NG8',
+//                         type: 'bar',
+//                         data: ng8,
+//                         label: {
+//                             show: true,
+//                             position: 'inside',
+//                             fontStyle: 'italic'
+//                         }
+//                     }
+//                 ]
+//             };
+//             // use configuration item and data specified to show chart
+//             ng_graph.setOption(ng_option);
+//         },
+//         failure: function (result) {
+//             $.notify("Ha ocurrido un Error");
+//         },
+//         error: function (result) {
+//             $.notify("Ha ocurrido un Error");
+//         }
+//     });
+// }
 function initWorkers() {
     $('#registroEmpleado').on('click', function () {
         let form = $('#RegistrarEmpleadoForm').serializeObject();
@@ -405,6 +403,7 @@ function initWorkers() {
             </div>
         </div>`;
             $(row).attr("data-parte", data._id);
+
             let op = $(row).children()[2];
             $(op).html(`<button type="button" class="btn btn-primary" data-toggle="modal" title="Editar" data-target="#EditarEmpleadoModal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
             $('#modales').html(modales);
@@ -467,6 +466,7 @@ function initWorkers() {
 }
 function initParts() {
     let modales = "", select = "";
+
     $.ajax({
         url: "/clients",
         type: 'GET',
@@ -474,6 +474,11 @@ function initParts() {
             let clientes = JSON.parse(result).data;
             clientes.forEach(cliente => {
                 select += `<option value="${cliente._id}"> ${cliente.name}</option>`
+            });
+            $('#clients').append(select)
+            $('#clients').on('change', function () {
+                $('#partes tbody tr').hide();
+                $('#partes tbody').find(` [data-cliente = '${$(this).val()}']`).show();
             });
             $('#selec_cliente').append(select);
 
@@ -497,6 +502,7 @@ function initParts() {
             { data: 'description' },
             { data: '_id' }
         ], "createdRow": function (row, data) {
+            $(row).attr("data-cliente", data.fk_customer);
             modales += `<div style="display:none" id="modal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog" aria-hidden="true"
             style="display: block; padding-right: 15px;">
             <div class="modal-dialog modal-lg">
@@ -557,11 +563,13 @@ function initParts() {
                     </div>
                     <div class="modal-footer">
                         <button id="editar-${data._id}" data-target="${data._id}" type="button" class="btn btn-primary editar">Guardar Cambios</button>
-                    </div>
+                    </div>  
                 </div>
             </div>
         </div>`;
+
             $(row).attr("data-parte", data._id);
+
             let op = $(row).children()[2];
             $(op).html(`<button type="button" class="btn btn-primary" data-toggle="modal" title="Editar" data-target="#modal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
             $('#modales').html(modales);
@@ -813,6 +821,12 @@ function initClient() {
 
 }
 function initReports() {
+    $('.logs').hide();
+    $('#reports').hide();
+    var report = 0;
+    let client = 0;
+    let idReport = 0;
+    let modal = "";
     $("#fecha_inicio").daterangepicker({
         singleDatePicker: !0,
         singleClasses: "picker_4",
@@ -821,44 +835,130 @@ function initReports() {
         },
         startDate: moment(),
     });
-    $("#fecha_fin").daterangepicker({
+    $("#fecha_master").daterangepicker({
         singleDatePicker: !0,
         singleClasses: "picker_4",
         locale: {
             format: 'DD/MM/YYYY'
-        },
-        startDate: moment().add(7, 'days')
-    });
-
-    let tabla_reportes = $('#reportes').DataTable({
-        'ajax': {
-            url: '/TableReports',
-            type: 'GET'
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'customer' },
-            { data: `s_date` },
-            { data: `f_date` },
-            { data: `status` },
-            { data: 'id' }
-        ], "createdRow": function (row, data) {
-            //$(row).attr("data-parte", data._id);
-            let op = $(row).children()[5];
-            $(op).html(`<button type="button" onclick="location.href='/reportslog/${data.id}'" class="btn btn-primary editar" data-toggle="modal" title="Editar"><span class="fa fa-edit"></span></button><button data-target="${data.id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
         }
     });
+    $("#fecha_master").on('change', function () {
+        $($(`#registros${report}`).find('thead [name="act_date"]')).data('default', `${$(this).val()}`);
+        $(`#registros${report} tbody [name = 'act_date']`).val($(this).val());
+    });
+    $('#reportes').hide();
+    let tabla_reportes = $('#tablareportes').DataTable({
+        columns: [
+            { data: 'ServiceCode' },
+            { data: `s_date` },
+            { data: 'id' }
+        ], "createdRow": function (row, data) {
+            modal += `<div style="display:none" id="InfoReporteModal-${data.id}" class="modal fade in" tabindex="-1" role="dialog"
+            aria-hidden="true" style="display: block; padding-right: 15px;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="modal-label-${data.id}">Información de Reporte</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <form id="InfoReporteForm-${data.id}" class="form-horizontal form-label-left">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Name Of Service</label>
+                                        <input type="text" value="${data.ServiceCode}" class="form-control" id="codeService" name="ServiceCode"
+                                            placeholder="Enter Service Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Invoice Number</label>
+                                        <input type="text" value="${data.invoice}" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Inspection Percentage</label>
+                                        <input type="number" class="form-control activity" id="insecPortcentage" value="${data.inspection}" name="inspection"
+                                            placeholder="Enter Inspection Percentage">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Rework Percentage</label>
+                                        <input type="number" class="form-control activity" id="reworkPercentage" value="${data.rework}" name="rework"
+                                            placeholder="Enter Rework Percentage">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sampling Percentage</label>
+                                        <input type="number" value="${data.sampling}" class="form-control activity" id="samplingPercentage" name="sampling"
+                                            placeholder="Enter Supplier's Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Partial Rework Percentage</label>
+                                        <input type="number" class="form-control activity" id="partialRework" value="${data.partialRework}" name="partialRework"
+                                            placeholder="Enter Partial Rework Percentage">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label>Lot Number QMC</label>
+                                        <input type="text" value="${data.lot_number}" class="form-control" id="numberQMC" name="LotNumberQMC"
+                                            placeholder="Enter Lot Number for QMC">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Start Date</label>
+                                        <input type=text name='fecha_inicio' value="${data.fecha_inicio}" placeholder="Fecha de Ingreso" class="form-control"
+                                            id="fecha_inicio" aria-describedby="inputSuccess2Status">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>End Date</label>
+                                        <input type=text name='fecha_fin' placeholder="Fecha de Ingreso" value="${data.fecha_fin}" class="form-control"
+                                            id="fecha_fin" aria-describedby="inputSuccess2Status">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Service Status</label>
+                                        <div id="status" class="form-control"></div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary editar"  data-form="#InfoReporteForm-${data.id}" data-id="${data.id}">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+
+            let op = $(row).children()[2];
+            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data.id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data.id}"><span class="fa fa-edit"></span></button><button data-target="${data.id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
+        }, 'searching': false
+    });
+
     $.ajax({
         url: "/clients",
         type: 'GET',
         success: function (result) {
+            let botones = "";
+            let select = "<option value='0'>Seleccionar Cliente...</option>";
             let clientes = JSON.parse(result).data;
-            clientes.forEach(cliente => {
-                let select = "";
-                select += `<option value="${cliente._id}"> ${cliente.name}</option>`
-            });
-            $('#selec_cliente').append(select);
 
+            clientes.forEach(cliente => {
+                botones += `<a data-customer="${cliente._id}" class="btn btn-danger btn-lg btn-block btn-huge cliente">Reportes
+                ${cliente.name}</a>`;
+
+                select += `<option value="${cliente._id}">${cliente.name}</option>`
+
+            });
+            $('#clientes').html(botones);
+            $('#selec_cliente').html(select);
+            $('.cliente').on('click', function () {
+                $('.tipo').hide();
+                let cliente = $(this).data('customer');
+                client = cliente;
+                let tipos = $(document).find(`[data-owner='${cliente}']`);
+                tipos.show();
+            });
         },
         failure: function (result) {
             $.notify("Ha ocurrido un Error");
@@ -868,17 +968,23 @@ function initReports() {
         }
     });
     $.ajax({
-
-        url: "/getparts/1",
+        url: "/getReports",
         type: 'GET',
         success: function (result) {
-            let select = "";
-            let partes = JSON.parse(result).data;
-            partes.forEach(part => {
-                select += `<option value="${part._id}"> ${part.name}</option>`
+            let botones = "";
+            let reportes = JSON.parse(result).data;
+            reportes.forEach(reporte => {
+                botones += `<a data-type="${reporte._id}" data-owner="${reporte.customer}" class="btn btn-primary btn-lg btn-block btn-huge tipo">${reporte.type}</a>`;
             });
-            $('#selec_part').append(select);
 
+            $('#tipos').html(botones);
+            $('.tipo').hide();
+            $('.tipo').on('click', function () {
+                let tipo = '/getReportByType/' + $(this).data("type");
+                report = $(this).data("type");
+                $('#reportes').show();
+                tabla_reportes.ajax.url(tipo).load();
+            });
         },
         failure: function (result) {
             $.notify("Ha ocurrido un Error");
@@ -887,37 +993,114 @@ function initReports() {
             $.notify("Ha ocurrido un Error");
         }
     });
-    $('#registroReporte').on('click', function () {
-        let form = $('#RegistrarReporteForm').serializeObject();
-        $.ajax({
-            url: "/register_report",
-            type: 'POST',
-            data: form,
-            dataType: "json",
-            success: function (result) {
-                alert("ok");
-                $("#AgregarReporteModal").modal('toggle');
-                $.notify("Reporte Registrado Correctamente");
-                tabla_reportes.ajax.reload().draw();
 
-            },
-            failure: function (result) {
-                $.notify("Ha ocurrido un Error");;
-            },
-            error: function (result) {
-                $.notify("Ha ocurrido un Error");
-            }
-        });
-    });
-    tabla_reportes.on('draw', function () {
-        $('.eliminar').on('click', function () {
+    $('#registroReporte').on('click', function () {
+        if (report != 0 && client != 0) {
+            let form = $('#RegistrarReporteForm').serializeObject();
+            form.client = client;
+            form.report = report;
             $.ajax({
-                url: `/deleteReport/${$(this).data("target")}`,
+                url: "/register_report",
                 type: 'POST',
+                data: form,
+                dataType: "json",
                 success: function (result) {
-                    $.notify("Reporte Eliminado Correctamente");
+                    $("#AgregarReporteModal").modal('toggle');
+                    $.notify("Reporte Registrado Correctamente", "success");
                     tabla_reportes.ajax.reload().draw();
 
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        } else {
+            $.notify("Reporte y/o cliente no seleccionados");
+        }
+    });
+    let options = "";
+    tabla_reportes.on('draw', function () {
+        $('#modales').html(modal);
+        $('.eliminar').on('click', function () {
+            let b = $(this).data('target');
+            $.confirm({
+                title: 'Eliminar Reporte',
+                content: '¿Desea eliminar el reporte?',
+                type: 'red',
+                closeIcon: true,
+                closeIconClass: 'fa fa-close',
+                backgroundDismiss: true,
+                escapeKey: true,
+                closeAnimation: 'left',
+                buttons: {
+                    confirmar: function () {
+                        $.ajax({
+                            url: `/deleteReport/${b}`,
+                            type: 'POST',
+                            success: function (result) {
+                                $.notify("Reporte Eliminado Correctamente");
+                                tabla_reportes.ajax.reload().draw();
+                            },
+                            failure: function (result) {
+                                $.notify("Ha ocurrido un Error");;
+                            },
+                            error: function (result) {
+                                $.notify("Ha ocurrido un Error");
+                            }
+                        });
+                    },
+                    cancelar: function () {
+                        $.alert('Acción Cancelada');
+                    }
+                }
+            });
+
+        });
+        $('.editar').on('click', function () {
+            let form = $($(this).data('form')).serializeObject();
+            form.id = $(this).data('id');
+            $.ajax({
+                url: "/edit_report",
+                type: 'POST',
+                dataType: 'json',
+                data: form,
+                success: function (result) {
+                    $(`#InfoReporteModal-${form.id}`).modal('toggle');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    tabla_reportes.ajax.reload().draw();
+                    $.notify("Reporte Actualizado Correctamente");
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        });
+
+        $('.insertar').on('click', function () {
+            options = ``;
+            $(`#selectreport`).hide(50);
+            $(`#reports`).show();
+            $(`#report${$(this).data('type')}`).show(50);
+            idReport = $(this).data('id');
+            arrayTables[report - 1].ajax.url(`/getReportLogs/${report}/${idReport}`).load();
+            $.ajax({
+                url: "/getparts/1",
+                type: 'GET',
+                success: function (result) {
+                    let data = JSON.parse(result).data;
+                    for (let index = 0; index < data.length; index++) {
+                        const element = data[index];
+                        if (element.fk_customer == client) {
+                            options += `<option value='${element.part_number}'>${element.part_number}</option>`
+                        }
+                    }
                 },
                 failure: function (result) {
                     $.notify("Ha ocurrido un Error");;
@@ -927,7 +1110,380 @@ function initReports() {
                 }
             });
         });
+
     });
+    $('#hours').on('change', function () {
+        $('#calculated').html(eval($(this).val()))//estará lanzando error
+    });
+    $('#return').on('click', function () {
+        $(`#selectreport`).show(50);
+        $(`#reports`).hide();
+        $(`.logs`).hide();
+    });
+
+    $('#addLog').on('click', function () {
+        let fn = $(`#registros${report}`).find('th');
+        let data = "";
+        for (let index = 0; index < fn.length; index++) {
+            if ($(fn[index]).attr('name') == "part_number") {
+                data += `"${$(fn[index]).attr('name')}":"<select class='form-control' name='${$(fn[index]).attr('name')}' style='background:transparent; border: none'>${options}</select>",`;
+            } else {
+                data += `"${$(fn[index]).attr('name')}":"<input name='${$(fn[index]).attr('name')}' type='${$(fn[index]).data('type')}' value='${$(fn[index]).data('default')}' style='background:transparent; border: none'/>",`;
+            }
+
+        }
+        let newnode = arrayTables[report - 1].row.add(JSON.parse("{" + data.slice(0, -1) + "}")).draw().node();
+        $(newnode).addClass('new');
+        $(newnode).css({'background-color':'gray','color':'black'});
+    });
+
+    $('#submit').on('click', function () {
+        let newRows = $(`#registros${report}`).find('.new');
+        if (newRows.length != 0) {
+            let data = {
+                report: report,
+                client: client,
+                people: `${$('#employees').val()}`,
+                date: `${$('#fecha_master').val()}`,
+                shift: `${$('#shift').val()}`,
+                hours: `${eval($('#hours').val())}`,
+                idReport: idReport,
+                logs: function () {
+                    let d = "[";
+                    for (let index = 0; index < newRows.length; index++) {
+                        let cols = $(newRows[index]).find('input, select');
+                        let log = `{`;
+                        for (let index = 0; index < cols.length; index++) {
+                            let field = cols[index];
+                            log += `"${field.name}": "${$(field).val()}",`
+                        }
+                        log = log.slice(0, -1) + '},';
+                        d += log;
+                    }
+                    return d.slice(0, -1) + '' + "]";
+                }
+            }
+            $.ajax({
+                url: "/insertlogs",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+
+    });
+    //Tablas
+    let arrayTables = [];
+    let registros1 = $('#registros1').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: `mfg_date` },
+            { data: 'lot_number' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'ng5' },
+            { data: 'ng6' },
+            { data: 'ng7' },
+            { data: 'total_pcs' },
+            { data: 'ng8' },
+            { data: 'ng9' },
+            { data: 'hours' },
+            { data: 'employees' }
+
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    let registros2 = $('#registros2').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        keys: true,
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: `act_date` },
+            { data: `part_number` },
+            { data: `mfg_date` },
+            { data: 'lot_number' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'ng5' },
+            { data: 'ng6' },
+            { data: 'ng7' },
+            { data: 'ng8' },
+            { data: 'ng9' },
+            { data: 'ng10' },
+            { data: 'ng11' },
+            { data: 'ng12' },
+            { data: 'ng13' },
+            { data: 'ng14' },
+            { data: 'ng15' },
+            { data: 'ng16' },
+            { data: 'ng17' },
+            { data: 'ng18' },
+            { data: 'total_pcs' },
+            { data: 'hours' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, "paging": false, keys: true,
+
+    });
+    let registros3 = $('#registros3').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: `mfg_date` },
+            { data: 'lot_number' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'ng5' },
+            { data: 'ng6' },
+            { data: 'ng7' },
+            { data: 'ng8' },
+            { data: 'ng9' },
+            { data: 'ng10' },
+            { data: 'ng11' },
+            { data: 'ng12' },
+            { data: 'ng13' },
+            { data: 'total_pcs' },
+            { data: 'hours' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    let registros4 = $('#registros4').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: `mfg_date` },
+            { data: 'lot_number' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'ng5' },
+            { data: 'ng6' },
+            { data: 'ng7' },
+            { data: 'ng8' },
+            { data: 'ng9' },
+            { data: 'ng10' },
+            { data: 'ng11' },
+            { data: 'ng12' },
+            { data: 'ng13' },
+            { data: 'ng14' },
+            { data: 'ng15' },
+            { data: 'total_pcs' },
+            { data: 'hours' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    let registros5 = $('#registros5').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: `inspection` },
+            { data: 'program' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'total_pcs' },
+            { data: 'hours' },
+            { data: 'shift' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    let registros6 = $('#registros6').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: `inspection` },
+            { data: 'program' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'total_pcs' },
+            { data: 'hours' },
+            { data: 'shift' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    let registros7 = $('#registros7').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: 'program' },
+            { data: 'mfg_date' },
+            { data: 'batch_number' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'reempaque' },
+            { data: 'reempaque' },
+            { data: 'hours' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    let registros8 = $('#registros8').on('key-focus', function (e, datatable, cell) {
+        if ($('.focus').find('input').length != 0) {
+            $($('.focus').find('input')[0]).focus();
+        }
+    }).DataTable({
+        columns: [
+            {
+                data: 'act_date',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'act_date' },
+            { data: `part_number` },
+            { data: `mfg_date` },
+            { data: 'lot_number' },
+            { data: 'serial_number' },
+            { data: 'box_pcs' },
+            { data: 'boxes_qty' },
+            { data: 'ok_pcs' },
+            { data: 'pending_pcs' },
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'ng5' },
+            { data: 'ng6' },
+            { data: 'total_pcs' },
+            { data: 'ng7' },
+            { data: 'ng8' },
+            { data: 'hours' },
+            { data: 'employees' }
+        ],
+        "ordering": false, "searching": false, keys: true
+    });
+    arrayTables.push(registros1);
+    arrayTables.push(registros2);
+    arrayTables.push(registros3);
+    arrayTables.push(registros4);
+    arrayTables.push(registros5);
+    arrayTables.push(registros6);
+    arrayTables.push(registros7);
+    arrayTables.push(registros8);
 }
 function initRerportsLog() {
     let report = window.location.pathname.split("/")[2];
@@ -992,20 +1548,18 @@ function initRerportsLog() {
             $.notify("Ha ocurrido un Error");
         }
     });
-    let registros = $('#logs').DataTable({
+    let registros1 = $('#logs').DataTable({
         'ajax': {
             url: `/getReportLogs/${report}`,
             type: 'GET'
         },
         columns: [
-            { data: '_id' },
             { data: 'act_date' },
             { data: `part_number` },
-            { data: `part_name` },
-            { data: `color` },
+            { data: `mfg_date` },
             { data: 'lot_number' },
             { data: 'serial_number' },
-            { data: 'pcs' },
+            { data: 'box_pcs' },
             { data: 'boxes_qty' },
             { data: 'ok_pcs' },
             { data: 'pending_pcs' },
@@ -1015,9 +1569,10 @@ function initRerportsLog() {
             { data: 'ng_4' },
             { data: 'ng_5' },
             { data: 'ng_6' },
-            { data: 'total' },
             { data: 'ng_7' },
+            { data: 'total' },
             { data: 'ng_8' },
+            { data: 'ng_9' },
             { data: 'work_hours' }
 
         ],
@@ -1036,24 +1591,6 @@ function initRerportsLog() {
     $('#addLog').on('click', function () {
         let form = $('#log').serializeObject();
         form.report = report;
-        
-        $.ajax({
-            url: "/insertLogs",
-            type: 'POST',
-            data: form,
-            dataType: 'json',
-            success: function (result) {
-                $.notify("Registro Correcto");
-                $('input').val("");
-                registros.ajax.reload().draw();
-            },
-            failure: function (result) {
-                $.notify("Ha ocurrido un Error");
-            },
-            error: function (result) {
-                $.notify("Ha ocurrido un Error");
-            }
-        });
     });
     $('#logs tbody').on('dblclick', 'tr', function () {
         if ($(this).hasClass('selected')) {
@@ -1259,21 +1796,3 @@ function init_daterangepicker() {
             })
     }
 }
-function setCookie(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + ";";
-}
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-} 

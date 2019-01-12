@@ -41,7 +41,7 @@ api.post('/parts/:b', function (req, res) {
     }
 });
 api.get('/getparts/:variant?', function (req, res) {
-    let sql = 'select p.*, c.name client from parts p join customers c on c._id=p.fk_customer;';
+    let sql = 'select p.*, c.name client,c._id idClient from parts p join customers c on c._id=p.fk_customer;';
     // let sql='select * from parts';
     try {
         if (req.params.variant == 1) {
