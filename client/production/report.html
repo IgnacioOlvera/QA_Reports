@@ -37,9 +37,47 @@
     <link href="../build/css/custom.min.css" rel="stylesheet">
 </head>
 
-<body class="nav-md">
+<body class="nav-md" oncontextmenu="return false;">
     <div class="container body">
         <div id="modales"></div>
+        <div style="display:none" id="SendEmailModal" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="true"
+            style="display: block; padding-right: 15px;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Enviar Notificación</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <form id="InfoCorreo" class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label>Destinatarios</label>
+                                    <input type="text" class="form-control" id="emails" name="emails" placeholder="Ingresar Emails separados por ,">
+                                </div>
+                                <div class="form-group">
+                                    <label>Asunto</label>
+                                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Asunto">
+                                </div>
+                                <div class="form-group">
+                                    <label>Invoice Number</label>
+                                    <textarea placeholder="Texto" name="content" class="form-control" id="content" cols="30"
+                                        rows="10"></textarea>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="enviarCorreo" type="button" class="btn btn-primary">Enviar Correo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div style="display:none" id="AgregarReporteModal" class="modal fade in" tabindex="-1" role="dialog"
             aria-hidden="true" style="display: block; padding-right: 15px;">
             <div class="modal-dialog modal-lg">
@@ -248,7 +286,7 @@
                                                         Number</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -299,7 +337,7 @@
                                                         Number</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -358,7 +396,7 @@
                                                         Number</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -412,7 +450,7 @@
                                                         Number</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -465,7 +503,7 @@
                                                     <th rowspan="3" name="program" data-default="" data-type="text">Program</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -508,7 +546,7 @@
                                                     <th rowspan="3" name="program" data-default="" data-type="text">Program</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -592,7 +630,56 @@
                                                         Number</th>
                                                     <th rowspan="3" name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number">Pieces/Box</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                        of
+                                                        Boxes</th>
+                                                    <td colspan="11">Quantity</td>
+                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
+                                                </tr>
+                                                <tr>
+                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
+                                                    <td colspan="6">NG (Defect Types)</td>
+                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
+                                                    <td colspan="2">Rework</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <th data-default="0" name="ng1" data-type="number">1</th>
+                                                    <th data-default="0" name="ng2" data-type="number">2</th>
+                                                    <th data-default="0" name="ng3" data-type="number">3</th>
+                                                    <th data-default="0" name="ng4" data-type="number">4</th>
+                                                    <th data-default="0" name="ng5" data-type="number">5</th>
+                                                    <th data-default="0" name="ng6" data-type="number">6</th>
+                                                    <th data-default="0" name="ng7" data-type="number">7</th>
+                                                    <th data-default="0" name="ng8" data-type="number">8</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div id="report9" class="logs">
+                                        <h1>Registros Retrabajo Teklas</h1>
+                                        <table id="registros9" class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="3" name="item" data-type="number" disabled
+                                                        data-default="0">Item</th>
+                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                        Date</th>
+                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                        Number</th>
+
+                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                        de
+                                                        Manufactura</th>
+                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                        Number</th>
+                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                        Serial Number</th>
+                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
                                                     <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
@@ -659,10 +746,11 @@
     <!-- Datetimepicker -->
     <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
     <!-- Datatables -->
     <script src="../vendors/datatables.net/js/jquery.dataTables.js"></script>
     <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
     <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
@@ -673,9 +761,11 @@
     <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendors/datatables.net/js/jszip.js"></script>
+
+
     <!-- jQuery Confirm -->
     <script src="../vendors/jquery-confirm/js/jquery-confirm.js"></script>
-
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
     <script src="../build/js/scripts.js"></script>

@@ -499,7 +499,7 @@ function initParts() {
         columns: [
             { data: '_id' },
             { data: 'name' },
-            { data: 'description' },
+            { data: 'part_number' },
             { data: '_id' }
         ], "createdRow": function (row, data) {
             $(row).attr("data-cliente", data.fk_customer);
@@ -796,7 +796,7 @@ function initClient() {
 
     $('#registroCliente').on('click', function () {
         let form = $('#RegistrarClienteForm').serializeObject();
-        if (form.nombre !== undefined && form.rfc !== undefined && form.nat !== undefined && typeof form.nombre === "string" && typeof form.rfc === "string" && typeof form.nat === "string" && form.rfc.length >= 12) {
+        if (form.nombre !== undefined && form.rfc !== undefined && form.nat !== undefined && typeof form.nombre === "string" && typeof form.rfc === "string" && typeof form.nat === "string") {
             $.ajax({
                 url: "/client/1",
                 type: 'POST',
@@ -823,6 +823,7 @@ function initClient() {
 function initReports() {
     $('.logs').hide();
     $('#reports').hide();
+
     var report = 0;
     let client = 0;
     let idReport = 0;
@@ -931,7 +932,7 @@ function initReports() {
         </div>`
 
             let op = $(row).children()[2];
-            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data.id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data.id}"><span class="fa fa-edit"></span></button><button data-target="${data.id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
+            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data.id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data.id}"><span class="fa fa-edit"></span></button><button data-target="${data.id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button><button type="button" class="btn btn-success " data-toggle="modal"  title="Notificar" data-target="#SendEmailModal"><span class="fa fa-bell"></span></button>`);
         }, 'searching': false
     });
 
@@ -1023,7 +1024,9 @@ function initReports() {
     });
     let options = "";
     tabla_reportes.on('draw', function () {
+        $('#modales').html("");
         $('#modales').html(modal);
+        modal = "";
         $('.eliminar').on('click', function () {
             let b = $(this).data('target');
             $.confirm({
@@ -1126,7 +1129,7 @@ function initReports() {
         let data = "";
         for (let index = 0; index < fn.length; index++) {
             if ($(fn[index]).attr('name') == "part_number") {
-                data += `"${$(fn[index]).attr('name')}":"<select class='form-control' name='${$(fn[index]).attr('name')}' style='background:transparent; border: none'>${options}</select>",`;
+                data += `"${$(fn[index]).attr('name')}":"<select name='${$(fn[index]).attr('name')}' style='background:transparent; border: none'>${options}</select>",`;
             } else {
                 data += `"${$(fn[index]).attr('name')}":"<input name='${$(fn[index]).attr('name')}' type='${$(fn[index]).data('type')}' value='${$(fn[index]).data('default')}' style='background:transparent; border: none'/>",`;
             }
@@ -1134,7 +1137,118 @@ function initReports() {
         }
         let newnode = arrayTables[report - 1].row.add(JSON.parse("{" + data.slice(0, -1) + "}")).draw().node();
         $(newnode).addClass('new');
-        $(newnode).css({'background-color':'gray','color':'black'});
+        $(newnode).css({ 'background-color': 'gray', 'color': 'black' });
+    });
+
+
+
+
+    $('#enviarCorreo').on('click', function () {
+        let form = $('#InfoCorreo').serializeObject();
+        for (let index = 0; index < form.emails.split(',').length; index++) {
+            const element = form.emails.split(',')[index];
+            console.log(element);
+            if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(`${element}`) == false) {
+                $.confirm({
+                    title: 'Error',
+                    content: 'Ocurrió un Error, al verificar ' + element + ' que las direcciones de correo estén serparados por una , (coma)',
+                    type: 'red',
+                    typeAnimated: true,
+                    closeIcon: true,
+                    closeIconClass: 'fa fa-close',
+                    backgroundDismiss: true,
+                    escapeKey: true,
+                    closeAnimation: 'left'
+                });
+                return
+
+            }
+
+        }
+        $.ajax({
+            url: "/sendNotification",
+            type: 'POST',
+            dataType: 'json',
+            data: form,
+            success: function (result) {
+                $('#enviarCorreo').closest('.modal-content').find('.modal-body').find('input, textarea').val('');
+                $(`#SendEmailModal`).modal('toggle');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                $.confirm({
+                    title: 'Notifiación Exitosa',
+                    content: 'La notificación ha sido enviada exitosamente',
+                    type: 'green',
+                    typeAnimated: true,
+                    closeIcon: true,
+                    closeIconClass: 'fa fa-close',
+                    backgroundDismiss: true,
+                    escapeKey: true,
+                    closeAnimation: 'left'
+                })
+            },
+            failure: function (result) {
+                $.confirm({
+                    title: 'Error',
+                    content: 'Ocurrió un Error, al verificar que las direcciones de correo estén serparados por una , (coma)',
+                    type: 'red',
+                    typeAnimated: true,
+                    closeIcon: true,
+                    closeIconClass: 'fa fa-close',
+                    backgroundDismiss: true,
+                    escapeKey: true,
+                    closeAnimation: 'left'
+                });
+            },
+            error: function (result) {
+                $.confirm({
+                    title: 'Error',
+                    content: 'Ocurrió un Error, verifica que las direcciones de correo estén serparados por una , (coma)',
+                    type: 'red',
+                    typeAnimated: true,
+                    closeIcon: true,
+                    closeIconClass: 'fa fa-close',
+                    backgroundDismiss: true,
+                    escapeKey: true,
+                    closeAnimation: 'left'
+                });
+            }
+        });
+    });
+
+    $('.logs').on('contextmenu', 'tr', function () {
+        let identifier = $(this).data('id');
+        $.confirm({
+            title: 'Eliminar Reporte',
+            content: '¿Desea eliminar el reporte?',
+            type: 'red',
+            closeIcon: true,
+            closeIconClass: 'fa fa-close',
+            backgroundDismiss: true,
+            escapeKey: true,
+            closeAnimation: 'left',
+            buttons: {
+                confirmar: function () {
+                    $.ajax({
+                        url: `/deleteLog/${identifier}`,
+                        type: 'GET',
+                        success: function (result) {
+                            $.notify(result.message, 'success');
+                            arrayTables[report - 1].ajax.reload().draw();
+                        },
+                        failure: function (result) {
+                            $.notify("Ha ocurrido un Error");;
+                        },
+                        error: function (result) {
+                            $.notify("Ha ocurrido un Error");
+                        }
+                    });
+                },
+                cancelar: function () {
+                    $.alert('Acción Cancelada');
+                }
+            }
+        });
     });
 
     $('#submit').on('click', function () {
@@ -1185,13 +1299,58 @@ function initReports() {
     //Tablas
     let arrayTables = [];
     let registros1 = $('#registros1').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1219,17 +1378,67 @@ function initReports() {
             { data: 'employees' }
 
         ],
-        "ordering": false, "searching": false, keys: true
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
     });
     let registros2 = $('#registros2').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
         keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1265,17 +1474,68 @@ function initReports() {
             { data: 'hours' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, "paging": false, keys: true,
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
 
     });
     let registros3 = $('#registros3').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1306,16 +1566,67 @@ function initReports() {
             { data: 'hours' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, keys: true
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
     });
     let registros4 = $('#registros4').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1348,16 +1659,67 @@ function initReports() {
             { data: 'hours' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, keys: true
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
     });
     let registros5 = $('#registros5').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1379,16 +1741,67 @@ function initReports() {
             { data: 'shift' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, keys: true
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
     });
     let registros6 = $('#registros6').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1411,16 +1824,67 @@ function initReports() {
             { data: 'shift' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, keys: true
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
     });
     let registros7 = $('#registros7').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1439,16 +1903,67 @@ function initReports() {
             { data: 'hours' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, keys: true
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
+            }
+        ], 'scrollX': true
     });
     let registros8 = $('#registros8').on('key-focus', function (e, datatable, cell) {
-        if ($('.focus').find('input').length != 0) {
-            $($('.focus').find('input')[0]).focus();
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
+            });
+        }
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
     }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
+        },
         columns: [
             {
-                data: 'act_date',
+                data: 'id',
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -1474,86 +1989,71 @@ function initReports() {
             { data: 'hours' },
             { data: 'employees' }
         ],
-        "ordering": false, "searching": false, keys: true
-    });
-    arrayTables.push(registros1);
-    arrayTables.push(registros2);
-    arrayTables.push(registros3);
-    arrayTables.push(registros4);
-    arrayTables.push(registros5);
-    arrayTables.push(registros6);
-    arrayTables.push(registros7);
-    arrayTables.push(registros8);
-}
-function initRerportsLog() {
-    let report = window.location.pathname.split("/")[2];
-
-    $.ajax({
-
-        url: "/workers",
-        type: 'GET',
-        success: function (result) {
-            let select = "";
-            let workers = JSON.parse(result).data;
-            for (let index = 0; index < workers.length; index++) {
-                const worker = workers[index];
-                select += `<option value="${worker._id}"> ${worker.first_name} ${worker.last_name}</option>`
-
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
             }
-            $('#select_worker').append(select);
-        },
-        failure: function (result) {
-            $.notify("Ha ocurrido un Error");
-        },
-        error: function (result) {
-            $.notify("Ha ocurrido un Error");
-        }
+        ], 'scrollX': true
     });
-
-    $.ajax({
-        url: "/clients",
-        type: 'GET',
-        success: function (result) {
-            let clientes = JSON.parse(result).data;
-            let select = "";
-            clientes.forEach(cliente => {
-                select += `<option value="${cliente._id}"> ${cliente.name}</option>`
+    let registros9 = $('#registros9').on('key-focus', function (e, datatable, cell) {
+        if ($(cell.node()).find('input').length != 0) {
+            $($(cell.node()).find('input')[0]).focus();
+        }
+    }).on('dblclick', 'td', function () {
+        let td = $(this)
+        if (!td.hasClass('toEdit')) {
+            let value = td.html()
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.addClass('toEdit');
+        }
+    }).on('key-blur', function (e, datatable, cell) {
+        let td = $(cell.node());
+        if (td.hasClass('toEdit')) {
+            let id = td.closest('tr').data('id');
+            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
+            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
+            let value = td.find('input').val();
+            td.removeClass('toEdit');
+            td.html(value)
+            let data = { log: id, name: name, value: value, type: type };
+            $.ajax({
+                url: "/editLog",
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    arrayTables[report - 1].ajax.reload().draw();
+                    $.notify(result.message, 'success');
+                },
+                failure: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                },
+                error: function (result) {
+                    $.notify("Ha ocurrido un Error");
+                }
             });
-            $('#cliente').append(select);
-
-        },
-        failure: function (result) {
-            $.notify("Ha ocurrido un Error");
-        },
-        error: function (result) {
-            $.notify("Ha ocurrido un Error");
         }
-    });
-    $.ajax({
-        url: "/getparts/1",
-        type: 'GET',
-        success: function (result) {
-            let parts = JSON.parse(result).data;
-            let select = "";
-            parts.forEach(part => {
-                select += `<option value="${part._id}"> ${part.name}</option>`
-            });
-            $('#select_part').append(select);
-
-        },
-        failure: function (result) {
-            $.notify("Ha ocurrido un Error");
-        },
-        error: function (result) {
-            $.notify("Ha ocurrido un Error");
+    }).on('key', function (e, datatable, key, cell, originalEvent) {
+        if (key == 13) {
+            let td = $(cell.node());
+            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+            let ntd = $(nrow).find('td')[td.index()];
+            $(ntd).trigger('click');
         }
-    });
-    let registros1 = $('#logs').DataTable({
-        'ajax': {
-            url: `/getReportLogs/${report}`,
-            type: 'GET'
+    }).DataTable({
+        keys: true,
+        'createdRow': function (row, data, dataIndex) {
+            $(row).attr('data-id', data.id);
         },
         columns: [
+            {
+                data: 'id',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
             { data: 'act_date' },
             { data: `part_number` },
             { data: `mfg_date` },
@@ -1563,86 +2063,38 @@ function initRerportsLog() {
             { data: 'boxes_qty' },
             { data: 'ok_pcs' },
             { data: 'pending_pcs' },
-            { data: 'ng_1' },
-            { data: 'ng_2' },
-            { data: 'ng_3' },
-            { data: 'ng_4' },
-            { data: 'ng_5' },
-            { data: 'ng_6' },
-            { data: 'ng_7' },
-            { data: 'total' },
-            { data: 'ng_8' },
-            { data: 'ng_9' },
-            { data: 'work_hours' }
-
+            { data: 'ng1' },
+            { data: 'ng2' },
+            { data: 'ng3' },
+            { data: 'ng4' },
+            { data: 'ng5' },
+            { data: 'ng6' },
+            { data: 'total_pcs' },
+            { data: 'ng7' },
+            { data: 'ng8' },
+            { data: 'hours' },
+            { data: 'employees' }
         ],
-        "ordering": false, "searching": false
-    });
-
-    $('#act_date').daterangepicker({
-        singleDatePicker: !0,
-        singleClasses: "picker_4",
-        locale: {
-            format: 'DD/MM/YYYY'
-        },
-        startDate: moment(),
-    });
-
-    $('#addLog').on('click', function () {
-        let form = $('#log').serializeObject();
-        form.report = report;
-    });
-    $('#logs tbody').on('dblclick', 'tr', function () {
-        if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
-            $(this).css('background-color', "#F9F9F9");
-        }
-        else {
-            registros.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-            $(this).css('background-color', "#acbad4");
-        }
-    });
-
-    $('#logs tbody tr').on('click', 'td', function () {
-
-    });
-}
-function initLogin() {
-    $('#login').on('click', async function () {
-        let data = {
-            correo: $("#usuario").val(),
-            pass: $("#pass").val()
-        }
-        if (data.correo != "" && data.pass != "") {
-            let options = {
-                method: 'post',
-                body: JSON.stringify(data),
-                headers: { "Content-Type": "application/json" }
+        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Save as Excel'
             }
-            let pet = await fetch('/log', options);
-            let res = await pet.json();
-            if (res.status == 200) {
-                setCookie("authorization", res.token);
-                localStorage.setItem("lvl", res.lvl);
-                if (res.lvl == 3) {
-                    window.location.replace("/qc");
-                } else {
-                    window.location.replace("/inicio");
-                }
-            } else {
-                $.notify(res.message);
-            }
-        } else {
-            $.notify('Falta Ingresar Usuario y/o Contraseña');
-        }
+        ], 'scrollX': true
     });
-    $(document).on('keydown', function (e) {
-        if (e.keyCode == 13) {
-            $('#login').trigger("click");
-        }
-    });
+    arrayTables.push(registros1);
+    arrayTables.push(registros2);
+    arrayTables.push(registros3);
+    arrayTables.push(registros4);
+    arrayTables.push(registros5);
+    arrayTables.push(registros6);
+    arrayTables.push(registros7);
+    arrayTables.push(registros8);
+    arrayTables.push(registros9);
 }
+
+
 (function ($) {//Función para transformar las formas en json
     $.fn.serializeObject = function () {
 
@@ -1709,90 +2161,3 @@ function initLogin() {
         return json;
     };
 })(jQuery);
-function init_daterangepicker() {
-    if ("undefined" != typeof $.fn.daterangepicker) {
-        var a = function (a, b, c) {
-            $("#reportrange span").html(a.format("DD/MMMM/YYYY") + " - " + b.format("DD/MMMM/YYYY"))
-        }
-            , b = {
-                startDate: moment(),
-                showDropdowns: !0,
-                showWeekNumbers: !0,
-                timePicker: !1,
-                timePickerIncrement: 1,
-                timePicker12Hour: !0,
-                ranges: {
-                    Hoy: [moment(), moment()],
-                    Ayer: [moment().subtract(1, "days"), moment().subtract(1, "days")],
-                    "Últimos 7 días": [moment().subtract(6, "days"), moment()],
-                    "Últimos 30 días": [moment().subtract(29, "days"), moment()],
-                    "Este Mes": [moment().startOf("month"), moment().endOf("month")],
-                    "Mes Pasado": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
-                },
-                opens: "left",
-                buttonClasses: ["btn btn-default"],
-                applyClass: "btn-small btn-primary",
-                cancelClass: "btn-small",
-                format: "MM/DD/YYYY",
-                separator: " a ",
-                locale: {
-                    applyLabel: "Terminar",
-                    cancelLabel: "Limpiar",
-                    fromLabel: "Desde",
-                    toLabel: "Hasta",
-                    customRangeLabel: "Personalizar",
-                    daysOfWeek: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sáb"],
-                    monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-                    firstDay: 1
-                }
-            };
-        $("#reportrange span").html(moment().subtract(29, "days").format("DD/MMMM/YYYY") + " - " + moment().format("DD/MMMM/YYYY")),
-            $("#reportrange").daterangepicker(b, a),
-            $("#reportrange").on("show.daterangepicker", function () {
-
-            }),
-            $("#reportrange").on("hide.daterangepicker", function () {
-
-            }),
-            $("#reportrange").on("apply.daterangepicker", async function (a, b) {
-                let fecha_inicio = b.startDate.format("DD/MM/YYYY");
-                let fecha_final = b.endDate.format("DD/MM/YYYY");
-                let data = {};
-
-                if (fecha_inicio == fecha_final) {
-                    data.fecha = b.startDate.format("DD/MM/YYYY")
-
-                } else {
-                    data.fecha_inicio = b.startDate.format("DD/MM/YYYY");
-                    data.fecha_final = b.endDate.format("DD/MM/YYYY");
-                }
-                let url = "/movimientosFecha"
-                let options = {
-                    method: 'post',
-                    body: JSON.stringify(data),
-                    headers: { "Content-Type": "application/json", authorization: getCookie("authorization") }
-                }
-
-                let pet = await fetch(url, options);
-                let movimientos = await pet.json();
-                $('#MovimientosInfo tbody tr').hide();
-                movimientos.forEach(movimiento => {
-                    $(`[data-id="${movimiento.id_movimiento}"]`).show();
-                });
-                mov.page.len(-1).draw();
-
-            }),
-            $("#reportrange").on("cancel.daterangepicker", function (a, b) {
-
-            }),
-            $("#options1").click(function () {
-                $("#reportrange").data("daterangepicker").setOptions(b, a)
-            }),
-            $("#options2").click(function () {
-                $("#reportrange").data("daterangepicker").setOptions(optionSet2, a)
-            }),
-            $("#destroy").click(function () {
-                $("#reportrange").data("daterangepicker").remove()
-            })
-    }
-}

@@ -51,7 +51,15 @@ api.post('/deleteReport/:id', function (req, res) {
     con.query(`delete from reports where _id  = ${id}`, function (err) {
         if (err) throw err
         else
-            res.send({ message: "Reporte Eliminado Correctamente" });
+            res.status(200).send({ message: "Reporte Eliminado Correctamente" });
+    });
+});
+
+api.get('/deleteLog/:id', function (req, res) {
+    let id = req.params.id;
+    con.query(`delete from inspectionreports_logs where _id = ${id}`, function (err) {
+        if (err) throw err
+        else res.send({ message: 'Registro eliminado correctamente.' })
     });
 });
 
@@ -60,22 +68,25 @@ api.get('/getReportLogs/:report/:idReport', function (req, res) {
     let idReport = req.params.idReport;
     let sql = "";
     if (report == 1) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10 + ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, ng8, ng9, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10 + ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, ng8, ng9, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 2) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng9,ng10,ng11,ng12,ng13,ng14,ng15,ng16,ng17,ng18, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id, date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng9,ng10,ng11,ng12,ng13,ng14,ng15,ng16,ng17,ng18, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 3) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng9,ng10,ng11,ng12,ng13, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng9,ng10,ng11,ng12,ng13, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 4) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng9,ng10,ng11,ng12,ng13,ng14,ng15, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours, employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng9,ng10,ng11,ng12,ng13,ng14,ng15, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours, employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 8) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 5) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, inspection, program, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,shift, employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, inspection, program, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,shift, employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 6) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, inspection, program, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3,ng4, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,shift, employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, inspection, program, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3,ng4, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,shift, employees from inspectionreports_logs r where fk_report=${idReport};`;
     } else if (report == 7) {
-        sql = `select date_format(activity_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, program,mfg_date, batch_number,serial_number, box_pcs, boxes_qty, ok_pcs, reempaque,hours, employees total_pcs, hours,shift, employees from inspectionreports_logs r where fk_report=${idReport};`;
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, program,mfg_date, batch_number,serial_number, box_pcs, boxes_qty, ok_pcs, reempaque,hours, employees total_pcs, hours,shift, employees from inspectionreports_logs r where fk_report=${idReport};`;
+    } else if (report == 9) {
+        sql = `select _id id,date_format(act_date, '%d/%m/%Y')                act_date, (select part_number from parts where _id = r.fk_part) part_number, date_format(mfg_date, '%d/%m/%Y')                     mfg_date, lot_number, serial_number, box_pcs, boxes_qty, ok_pcs, pending_pcs, ng1, ng2, ng3, ng4, ng5, ng6, ng7,ng8, ng1 + ng2 + ng3 + ng4 + ng5 + ng6 + ng7 + ng8 + ng9 + ng10+ ng11 + ng12 + ng13 + ng14 + ng15 + ng16+ ng17 + ng18 total_pcs, hours,employees from inspectionreports_logs r where fk_report=${idReport};`;
     }
+
 
     con.query(sql, function (err, rows) {
         if (err)
@@ -104,9 +115,18 @@ api.post('/insertlogs', function (req, res) {
     }
 
 });
-api.get('/sendNotification', function (req, res) {
+api.post('/sendNotification', function (req, res) {
     try {
         let info = req.body;
+        let destino = info.emails;
+        let subject = info.subject;
+        let content = info.content;
+        for (let index = 0; index < destino.split(',').length; index++) {
+            const element = destino.split(',')[index].toLowerCase().trim();
+            if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(`${element}`) == false) {
+                return res.status(500).send({ data: element });
+            }
+        }
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -117,20 +137,45 @@ api.get('/sendNotification', function (req, res) {
         });
         let mailOptions = {
             from: '"Ignacio Olvera" <qmc.iolvera@gmail.com>', // sender address
-            to: "ignacio.olvera766@yahoo.com.mx", // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>" // html body
+            to: destino, // list of receivers
+            subject: subject, // Subject line
+            text: content//plain text body
         };
-        let info = transporter.sendMail(mailOptions)
-
-        console.log("Message sent: %s", info.messageId);
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        res.send({ message: "Ok" });
+        let send = transporter.sendMail(mailOptions);
+        res.status(200).send({ message: "Mensaje Enviado" });
     } catch (e) {
-        res.send({ message: "No" });
+        return res.status(500).send({ message: "No" });
     }
+});
+
+api.post('/editLog', function (req, res) {
+    let data = req.body;
+    console.log(data);
+    if (data.type == 'text') {
+        if (data.name == 'part_number') {
+            con.query(`update inspectionreports_logs set fk_part=(select _id from parts where part_number = '${data.value}') where _id=${data.log}`, function (err) {
+                if (err) throw err
+                else res.status(200).send({ message: 'Registro Editado Correctamente' })
+            })
+        } else {
+            con.query(`update inspectionreports_logs set ${data.name}='${data.value}' where _id=${data.log}`, function (err) {
+                if (err) throw err
+                else res.status(200).send({ message: 'Registro Editado Correctamente' })
+            })
+        }
+
+    } else if (data.name == 'act_date' || data.name == "mgf_date") {
+        con.query(`update inspectionreports_logs set ${data.name}=date_formar(str_to_date('${data.value}','%d/%m/%Y'),'%Y-%m-%d') where _id=${data.log}`, function (err) {
+            if (err) throw err
+            else res.status(200).send({ message: 'Registro Editado Correctamente' })
+        })
+    } else if (data.type == 'number') {
+        con.query(`update inspectionreports_logs set ${data.name}=${data.value} where _id=${data.log}`, function (err) {
+            if (err) throw err
+            else res.status(200).send({ message: 'Registro Editado Correctamente' })
+        })
+    }
+
 });
 
 //Consultas para Clientes
