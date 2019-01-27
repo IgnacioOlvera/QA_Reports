@@ -94,50 +94,22 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Name Of Service</label>
-                                        <input type="text" class="form-control" id="codeService" name="ServiceCode"
+                                        <input type="text" class="form-control" id="codeService" name="ServiceName"
                                             placeholder="Enter Service Name">
                                     </div>
                                     <div class="form-group">
                                         <label>Invoice Number</label>
                                         <input type="text" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number">
                                     </div>
-                                    <div class="form-group">
-                                        <label>Inspection Percentage</label>
-                                        <input type="number" class="form-control activity" id="insecPortcentage" name="inspection"
-                                            placeholder="Enter Inspection Percentage">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Rework Percentage</label>
-                                        <input type="number" class="form-control activity" id="reworkPercentage" name="rework"
-                                            placeholder="Enter Rework Percentage">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Sampling Percentage</label>
-                                        <input type="number" class="form-control activity" id="samplingPercentage" name="sampling"
-                                            placeholder="Enter Supplier's Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Partial Rework Percentage</label>
-                                        <input type="number" class="form-control activity" id="partialRework" name="partialRework"
-                                            placeholder="Enter Partial Rework Percentage">
-                                    </div>
                                 </div>
                                 <div class="col-md-6">
-
                                     <div class="form-group">
                                         <label>Lot Number QMC</label>
-                                        <input type="text" class="form-control" id="numberQMC" name="LotNumberQMC"
+                                        <input type="text" class="form-control" id="numberQMC" name="LotNumber"
                                             placeholder="Enter Lot Number for QMC">
                                     </div>
-                                    <div class="form-group">
-                                        <label>Start Date</label>
-                                        <input type=text name='fecha_inicio' placeholder="Fecha de Ingreso" class="form-control"
-                                            id="fecha_inicio" aria-describedby="inputSuccess2Status">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Service Status</label>
-                                        <div id="status" class="form-control"></div>
-                                    </div>
+
+
                                 </div>
 
                             </form>
@@ -223,7 +195,7 @@
                                             <table id="tablareportes" class="table table-striped table-bordered">
                                                 <thead>
                                                     <th>Item</th>
-                                                    <th>Semana</th>
+                                                    <th>Nombre</th>
                                                     <th>Operaciones</th>
                                                 </thead>
                                             </table>
@@ -272,39 +244,25 @@
                                         <table id="registros1" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
 
-                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                    <th name="lot_number" data-default="" data-type="text">Lot
                                                         Number</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="12">Quantity</td>
-                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-                                                    <th rowspan="3" name="employees" data-type="text" data-default="">Employees</th>
-
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="7">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-                                                    <td colspan="2">Rework</td>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
@@ -312,8 +270,12 @@
                                                     <th data-default="0" name="ng5" data-type="number">5</th>
                                                     <th data-default="0" name="ng6" data-type="number">6</th>
                                                     <th data-default="0" name="ng7" data-type="number">7</th>
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
                                                     <th data-default="0" name="ng8" data-type="number">8</th>
                                                     <th data-default="0" name="ng9" data-type="number">9</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th name="employees" data-type="text" data-default="">Employees</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -323,37 +285,25 @@
                                         <table id="registros2" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
 
-                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                    <th name="lot_number" data-default="" data-type="text">Lot
                                                         Number</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="21">Quantity</td>
-                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="18">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
@@ -372,6 +322,10 @@
                                                     <th data-default="0" name="ng16" data-type="number">16</th>
                                                     <th data-default="0" name="ng17" data-type="number">17</th>
                                                     <th data-default="0" name="ng18" data-type="number">18</th>
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
 
                                                 </tr>
                                             </thead>
@@ -382,37 +336,24 @@
                                         <table id="registros3" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
-
-                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                    <th name="lot_number" data-default="" data-type="text">Lot
                                                         Number</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="16">Quantity</td>
-                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="13">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
@@ -426,6 +367,10 @@
                                                     <th data-default="0" name="ng11" data-type="number">11</th>
                                                     <th data-default="0" name="ng12" data-type="number">12</th>
                                                     <th data-default="0" name="ng13" data-type="number">13</th>
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -436,38 +381,25 @@
                                         <table id="registros4" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
 
-                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                    <th name="lot_number" data-default="" data-type="text">Lot
                                                         Number</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="18">Quantity</td>
-                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="15">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
@@ -483,6 +415,11 @@
                                                     <th data-default="0" name="ng13" data-type="number">13</th>
                                                     <th data-default="0" name="ng14" data-type="number">14</th>
                                                     <th data-default="0" name="ng15" data-type="number">15</th>
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
+
                                                 </tr>
                                             </thead>
                                         </table>
@@ -492,40 +429,30 @@
                                         <table id="registros5" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
 
-                                                    <th rowspan="3" name="inspection" data-type="date" data-default="0000/00/00">Inspection</th>
-                                                    <th rowspan="3" name="program" data-default="" data-type="text">Program</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="inspection" data-type="date" data-default="0000/00/00">Inspection</th>
+                                                    <th name="program" data-default="" data-type="text">Program</th>
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="7">Quantity</td>
-                                                    <th rowspan="3" data-default="" name="shift" data-type="text">Shift</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="3">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-                                                    <th rowspan="2" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
-
-
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="shift" data-type="text">Shift</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -535,40 +462,30 @@
                                         <table id="registros6" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
-
-                                                    <th rowspan="3" name="inspection" data-type="date" data-default="0000/00/00">Inspection</th>
-                                                    <th rowspan="3" name="program" data-default="" data-type="text">Program</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="inspection" data-type="date" data-default="0000/00/00">Inspection</th>
+                                                    <th name="program" data-default="" data-type="text">Program</th>
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="8">Quantity</td>
-                                                    <th rowspan="3" data-default="" name="shift" data-type="text">Shift</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="4">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-                                                    <th rowspan="2" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
                                                     <th data-default="0" name="ng4" data-type="number">4</th>
-
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="shift" data-type="text">Shift</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -578,28 +495,27 @@
                                         <table id="registros7" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="2" name="item" data-type="number" disabled>Item</th>
-                                                    <th rowspan="2" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled>Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="2" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
-                                                    <th rowspan="2" name="program" data-default="" data-type="text">
+                                                    <th name="program" data-default="" data-type="text">
                                                         Program</th>
-                                                    <th rowspan="2" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="2" name="batch_number" data-default="" data-type="text">
+                                                    <th name="batch_number" data-default="" data-type="text">
                                                         Batch Number Bosch</th>
-                                                    <th rowspan="2" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
 
-                                                    <th rowspan="2" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="2" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="3">Quantity</td>
-                                                </tr>
-                                                <tr>
+
+
                                                     <th name="ok_pcs" data-default="0" data-type="number">OK</th>
                                                     <th data-default="0" name="reempaque" data-type="number">Reempaque</th>
                                                     <th data-default="0" name="total_pcs" data-type="number">Total</th>
@@ -616,46 +532,37 @@
                                         <table id="registros8" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
 
-                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                    <th name="lot_number" data-default="" data-type="text">Lot
                                                         Number</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="11">Quantity</td>
-                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="6">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-                                                    <td colspan="2">Rework</td>
-
-                                                </tr>
-                                                <tr>
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
                                                     <th data-default="0" name="ng4" data-type="number">4</th>
                                                     <th data-default="0" name="ng5" data-type="number">5</th>
                                                     <th data-default="0" name="ng6" data-type="number">6</th>
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
                                                     <th data-default="0" name="ng7" data-type="number">7</th>
                                                     <th data-default="0" name="ng8" data-type="number">8</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -665,46 +572,43 @@
                                         <table id="registros9" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="3" name="item" data-type="number" disabled
-                                                        data-default="0">Item</th>
-                                                    <th rowspan="3" name="act_date" data-type="text" data-default="0000/00/00">Activity
+                                                    <th name="item" data-type="number" disabled data-default="0">Item</th>
+                                                    <th name="act_date" data-type="text" data-default="0000/00/00">Activity
                                                         Date</th>
-                                                    <th rowspan="3" name="part_number" data-type="text" data-default="">Part
+                                                    <th name="part_number" data-type="text" data-default="">Part
                                                         Number</th>
 
-                                                    <th rowspan="3" name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
+                                                    <th name="mfg_date" data-type="date" data-default="0000/00/00">Fecha
                                                         de
                                                         Manufactura</th>
-                                                    <th rowspan="3" name="lot_number" data-default="" data-type="text">Lot
+                                                    <th name="lot_number" data-default="" data-type="text">Lot
                                                         Number</th>
-                                                    <th rowspan="3" name="serial_number" data-default="" data-type="text">
+                                                    <th name="serial_number" data-default="" data-type="text">
                                                         Serial Number</th>
-                                                    <th rowspan="3" name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
-                                                    <th rowspan="3" name="boxes_qty" data-default="0" data-type="number">Quantity
+                                                    <th name="box_pcs" data-type="number" data-default="0">Pieces/Box</th>
+                                                    <th name="boxes_qty" data-default="0" data-type="number">Quantity
                                                         of
                                                         Boxes</th>
-                                                    <td colspan="11">Quantity</td>
-                                                    <th rowspan="3" data-default="0" name="hours" data-type="number">Hours
-                                                        Invested</th>
-                                                    <th rowspan="3" data-default="" name="employees" data-type="text">Employees</th>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="2" name="ok_pcs" data-default="0" data-type="number">OK</th>
-                                                    <th rowspan="2" data-default="0" name="pending_pcs" data-type="number">Pending</th>
-                                                    <td colspan="6">NG (Defect Types)</td>
-                                                    <th rowspan="2" data-default="0" name="total_pcs" data-type="number">Total</th>
-                                                    <td colspan="2">Rework</td>
 
-                                                </tr>
-                                                <tr>
+
+                                                    <th name="ok_pcs" data-default="0" data-type="number">OK</th>
+                                                    <th data-default="0" name="pending_pcs" data-type="number">Pending</th>
+
+
+
+
                                                     <th data-default="0" name="ng1" data-type="number">1</th>
                                                     <th data-default="0" name="ng2" data-type="number">2</th>
                                                     <th data-default="0" name="ng3" data-type="number">3</th>
                                                     <th data-default="0" name="ng4" data-type="number">4</th>
                                                     <th data-default="0" name="ng5" data-type="number">5</th>
                                                     <th data-default="0" name="ng6" data-type="number">6</th>
+                                                    <th data-default="0" name="total_pcs" data-type="number">Total</th>
                                                     <th data-default="0" name="ng7" data-type="number">7</th>
                                                     <th data-default="0" name="ng8" data-type="number">8</th>
+                                                    <th data-default="0" name="hours" data-type="number">Hours
+                                                        Invested</th>
+                                                    <th data-default="" name="employees" data-type="text">Employees</th>
                                                 </tr>
                                             </thead>
                                         </table>

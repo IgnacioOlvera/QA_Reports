@@ -57,37 +57,28 @@
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="nombre" id="parte_nombre" class="form-control col-md-7 col-xs-12"
+                                        <input type="text" name="name" id="parte_nombre" class="form-control col-md-7 col-xs-12"
                                             placeholder="Nombre de la Parte" />
                                     </div>
-                                </div><div class="item form-group">
+                                </div>
+                                <div class="item form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                         Número de Parte
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="part_number" id="part_number" class="form-control col-md-7 col-xs-12"
+                                        <input type="text" name="number" id="part_number" class="form-control col-md-7 col-xs-12"
                                             placeholder="Número de Parte" />
                                     </div>
                                 </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        Descripción
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="descripcion" id="descripcion" class="form-control col-md-7 col-xs-12"
-                                            placeholder="Descripción" />
-                                    </div>
-                                </div>
-                                
+
                                 <div class="item form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                         Cliente
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select class="form-control col-md-7 col-xs-12" name="cliente" id="selec_cliente">
+                                        <select class="form-control col-md-7 col-xs-12" name="customer" id="selec_cliente">
                                             <option selected disabled>Selección...</option>
                                         </select>
                                     </div>
@@ -155,7 +146,10 @@
                                 <h3>Reportes</h3>
                             </div>
                             <div class="x_content">
-                                <select id="clients" class="form-control"></select>
+                                <div class="col-md-4">
+                                    <select id="clients" class="form-control"></select>
+                                </div>
+
                                 <div class="pull-right">
                                     <button type="button" data-toggle="modal" class="btn btn-danger" data-target="#AgregarParteModal"
                                         id="new_client">
@@ -212,6 +206,7 @@
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+    <script src="../build/js/notify.js"></script>
     <script src="../build/js/scripts.js"></script>
 
     <script>

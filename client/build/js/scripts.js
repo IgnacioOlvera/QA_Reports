@@ -1,477 +1,13 @@
-$('#vinetas').html(`<ul class="nav side-menu"> <li> <a href='/home'> <i class="fa fa-home"></i> Inicio </a> </li> <li> <a href='/report'> <i class="fa fa-list-ul"></i> Reportes </a> </li><li> <a href='/client'> <i class="fa fa-industry"></i> Clientes </a> </li><li> <a href='/parts'> <i class="fa fa-wrench"></i> Partes </a> </li><li> <a href='/operators'> <i class="fa fa-users"></i> Empleados </a> </li></ul> `);
+$('#vinetas').html(`<ul class="nav side-menu"> <li> <a href='/report'> <i class="fa fa-home"></i> Inicio </a> </li><li> <a href='/client'> <i class="fa fa-industry"></i> Clientes </a> </li><li> <a href='/parts'> <i class="fa fa-wrench"></i> Partes </a> </li><li> <a href='/types'> <i class="fa fa-puzzle-piece"></i> Reports Models </a> </li></ul> `);
 
-$('#logout').on('click', function () {
-    localStorage.clear();
-    window.location.replace("/login");
-});
-// function initInicio() {
-//     // $.ajax({
-//     //     url: "/pcsperworker",
-//     //     type: 'GET',
-//     //     success: function (data) {
-//     //         // based on prepared DOM, initialize echarts instance
-//     //         let workers_graph = echarts.init(document.getElementById('inspected_parts_by_worker'));
-//     //         // specify chart configuration item and data
-//     //         let workers = [], total = [], values = [];
-//     //         for (let index = 0; index < data.length; index++) {
-//     //             const record = data[index];
-//     //             workers.push(record.first_name)
-//     //             values.push({
-//     //                 name: record.first_name,
-//     //                 type: 'bar',
-//     //                 data: [record.total],
-//     //                 label: {
-//     //                     show: true,
-//     //                     position: 'inside',
-//     //                     fontStyle: 'italic'
-//     //                 }
-//     //             });
-//     //         }
-//     //         let workers_option = {
-//     //             title: {
-//     //                 text: 'Número de Partes Inspeccionadas por Operario'
-//     //             }, tooltip: {
-//     //                 trigger: 'axis'
-//     //             },
-//     //             toolbox: {
-//     //                 feature: {
-//     //                     dataView: {
-//     //                         show: true, readOnly: false,
-//     //                         title: "Ver Info",
-//     //                         lang: [
-//     //                             "Información en Texto Plano",
-//     //                             "Cerrar",
-//     //                             "Actualizar"
-//     //                         ]
-//     //                     },
-//     //                     magicType: { show: true, type: 'line' },
-//     //                     saveAsImage: { show: true, title: "Descargar Imágen" }
-//     //                 }
-//     //             },
-//     //             legend: {
-//     //                 data: workers
-//     //             },
-//     //             xAxis: [
-//     //                 {
-//     //                     type: 'category',
-//     //                     data: ['Total de Partes Inspeccionadas'],
-//     //                     axisPointer: {
-//     //                         type: 'shadow'
-//     //                     }
-//     //                 }
-//     //             ],
-//     //             yAxis: [
-//     //                 {
-//     //                     type: 'value',
-//     //                     name: 'Cantidad'
-//     //                 }
-//     //             ],
-//     //             series: values
-//     //         };
-//     //         // use configuration item and data specified to show chart
-//     //         workers_graph.setOption(workers_option);
-//     //     },
-//     //     failure: function (result) {
-//     //         $.notify("Ha ocurrido un Error");
-//     //     },
-//     //     error: function (result) {
-//     //         $.notify("Ha ocurrido un Error");
-//     //     }
-//     // });
-//     // $.ajax({
-//     //     url: "/getokandngparts",
-//     //     type: 'GET',
-//     //     success: function (data) {
-//     //         // based on prepared DOM, initialize echarts instance
-//     //         let ok_graph = echarts.init(document.getElementById('ok_graph'));
-//     //         // specify chart configuration item and data
-//     //         let ok = [], ng = [], pending = [], partes = [];
-//     //         for (let index = 0; index < data.length; index++) {
-//     //             const record = data[index];
-//     //             if (partes.indexOf(record.part_name) == -1) {
-//     //                 partes.push(record.part_name);
-//     //             }
-//     //             ok.push(record.ok);
-//     //             ng.push(record.ng);
-//     //             pending.push(record.pending);
-//     //         }
-//     //         let ok_option = {
-//     //             title: {
-//     //                 text: 'Partes con Defectos'
-//     //             }, tooltip: {
-//     //                 trigger: 'axis'
-//     //             },
-//     //             toolbox: {
-//     //                 feature: {
-//     //                     dataView: {
-//     //                         show: true, readOnly: false,
-//     //                         title: "Ver Info",
-//     //                         lang: [
-//     //                             "Información en Texto Plano",
-//     //                             "Cerrar",
-//     //                             "Actualizar"
-//     //                         ]
-//     //                     },
-//     //                     magicType: { show: true, type: 'line' },
-//     //                     saveAsImage: { show: true, title: "Descargar Imágen" }
-//     //                 }
-//     //             },
-//     //             legend: {
-//     //                 data: ['OK', 'NG', 'Pending']
-//     //             },
-//     //             xAxis: [
-//     //                 {
-//     //                     type: 'category',
-//     //                     data: partes,
-//     //                     axisPointer: {
-//     //                         type: 'shadow'
-//     //                     }
-//     //                 }
-//     //             ],
-//     //             yAxis: [
-//     //                 {
-//     //                     type: 'value',
-//     //                     name: 'Cantidad'
-//     //                 }
-//     //             ],
-//     //             series: [
-//     //                 {
-//     //                     name: 'OK',
-//     //                     type: 'bar',
-//     //                     data: ok,
-//     //                     label: {
-//     //                         show: true,
-//     //                         position: 'inside',
-//     //                         fontStyle: 'italic'
-//     //                     }
-//     //                 }, {
-//     //                     name: 'NG',
-//     //                     type: 'bar',
-//     //                     data: ng,
-//     //                     label: {
-//     //                         show: true,
-//     //                         position: 'inside',
-//     //                         fontStyle: 'italic'
-//     //                     }
-//     //                 }, {
-//     //                     name: 'Pending',
-//     //                     type: 'bar',
-//     //                     data: pending,
-//     //                     label: {
-//     //                         show: true,
-//     //                         position: 'inside',
-//     //                         fontStyle: 'italic'
-//     //                     }
-//     //                 }
-//     //             ]
-//     //         };
-//     //         // use configuration item and data specified to show chart
-//     //         ok_graph.setOption(ok_option);
-//     //     },
-//     //     failure: function (result) {
-//     //         $.notify("Ha ocurrido un Error");
-//     //     },
-//     //     error: function (result) {
-//     //         $.notify("Ha ocurrido un Error");
-//     //     }
-//     // });
-//     $.ajax({
-//         url: "/getngparts",
-//         type: 'GET',
-//         success: function (data) {
-//             // based on prepared DOM, initialize echarts instance
-//             let ng_graph = echarts.init(document.getElementById('ng_graph'));
-//             // specify chart configuration item and data
-//             let ng1 = [], ng2 = [], ng3 = [], ng4 = [], ng5 = [], ng6 = [], ng7 = [], ng8 = [], partes = [];
-//             for (let index = 0; index < data.length; index++) {
-//                 const record = data[index];
-//                 if (partes.indexOf(record.part_name) == -1) {
-//                     partes.push(record.part_name);
-//                 }
-//                 ng1.push(record.ng1);
-//                 ng2.push(record.ng2);
-//                 ng3.push(record.ng3);
-//                 ng4.push(record.ng4);
-//                 ng5.push(record.ng5);
-//                 ng6.push(record.ng6);
-//                 ng7.push(record.ng7);
-//                 ng8.push(record.ng8);
-
-//             }
-//             let ng_option = {
-//                 title: {
-//                     text: 'Partes con Defectos'
-//                 }, tooltip: {
-//                     trigger: 'axis'
-//                 },
-//                 toolbox: {
-//                     feature: {
-//                         dataView: {
-//                             show: true, readOnly: false,
-//                             title: "Ver Info",
-//                             lang: [
-//                                 "Información en Texto Plano",
-//                                 "Cerrar",
-//                                 "Actualizar"
-//                             ]
-//                         },
-//                         magicType: { show: true, type: 'line' },
-//                         saveAsImage: { show: true, title: "Descargar Imágen" }
-//                     }
-//                 },
-//                 legend: {
-//                     data: ['NG1', 'NG2', 'NG3', 'NG4', 'NG5', 'NG6', 'NG7', 'NG8',]
-//                 },
-//                 xAxis: [
-//                     {
-//                         type: 'category',
-//                         data: partes,
-//                         axisPointer: {
-//                             type: 'shadow'
-//                         }
-//                     }
-//                 ],
-//                 yAxis: [
-//                     {
-//                         type: 'value',
-//                         name: 'Cantidad'
-//                     }
-//                 ],
-//                 series: [
-//                     {
-//                         name: 'NG1',
-//                         type: 'bar',
-//                         data: ng1,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG2',
-//                         type: 'bar',
-//                         data: ng2,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG3',
-//                         type: 'bar',
-//                         data: ng3,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG4',
-//                         type: 'bar',
-//                         data: ng4,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG5',
-//                         type: 'bar',
-//                         data: ng5,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG6',
-//                         type: 'bar',
-//                         data: ng6,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG7',
-//                         type: 'bar',
-//                         data: ng7,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }, {
-//                         name: 'NG8',
-//                         type: 'bar',
-//                         data: ng8,
-//                         label: {
-//                             show: true,
-//                             position: 'inside',
-//                             fontStyle: 'italic'
-//                         }
-//                     }
-//                 ]
-//             };
-//             // use configuration item and data specified to show chart
-//             ng_graph.setOption(ng_option);
-//         },
-//         failure: function (result) {
-//             $.notify("Ha ocurrido un Error");
-//         },
-//         error: function (result) {
-//             $.notify("Ha ocurrido un Error");
-//         }
-//     });
-// }
-function initWorkers() {
-    $('#registroEmpleado').on('click', function () {
-        let form = $('#RegistrarEmpleadoForm').serializeObject();
-        $.ajax({
-            url: "/workers/1",
-            type: 'POST',
-            data: form,
-            dataType: 'json',
-            success: function (result) {
-                $(`#AgregarEmpleadoModal`).modal('toggle');
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
-                $.notify("Empleado Registrado Correctamente");
-                TablaEmpleados.ajax.reload().draw();
-            },
-            failure: function (result) {
-                $.notify("Ha ocurrido un Error");
-            },
-            error: function (result) {
-                $.notify("Ha ocurrido un Error");
-            }
-        });
-
-    });
-
-    let TablaEmpleados = $('#empleados').DataTable({//Inicializar tabla de clientes.
-        'ajax': {
-            'url': '/workers',
-            'type': 'GET'
-        },
-        columns: [
-            { data: '_id' },
-            { data: 'first_name' },
-            { data: 'last_name' },
-            { data: '_id' }
-        ], "createdRow": function (row, data) {
-            modales += `<div style="display:none" id="EditarEmpleadoModal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog"
-            aria-hidden="true" style="display: block; padding-right: 15px;">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Editar Empleado</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="EditarEmpleadoForm-${data._id}" class="form-horizontal form-label-left">
-                            <div class="col-md-12">
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        Nombre
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="first_name" value="${data.first_name}" id="first_name-${data._id}" class="form-control col-md-7 col-xs-12"
-                                            placeholder="Nombre de Empleado" />
-                                    </div>
-                                </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        Apellido
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="last_name" value="${data.last_name}" id="last_name-${data._id}" class="form-control col-md-7 col-xs-12"
-                                            placeholder="Apellido" />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="editar" data-target="${data._id}" type="button" class="btn btn-primary">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-            $(row).attr("data-parte", data._id);
-
-            let op = $(row).children()[2];
-            $(op).html(`<button type="button" class="btn btn-primary" data-toggle="modal" title="Editar" data-target="#EditarEmpleadoModal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
-            $('#modales').html(modales);
-        }, "columnDefs": [
-            {
-                "targets": [0],
-                "visible": false
-            }
-        ], "bPaginate": false, "searching": false, "ordering": false,
-    }).draw();
-
-    TablaEmpleados.on('draw', function () {
-        $('.editar').on('click', function () {
-            let id = $(this).data("target");
-            let form = $(`#EditarEmpleadoForm-${id}`).serializeObject();
-            form.id = id;
-            $.ajax({
-                url: "/workers/0",
-                type: 'POST',
-                dataType: 'json',
-                data: form,
-                success: function (result) {
-                    $(`#EditarEmpleadoModal-${id}`).modal('toggle');
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    $.notify("Empleado Editado Correctamente");
-                    TablaEmpleados.ajax.reload().draw();
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        });
-
-        $('.eliminar').on('click', function () {
-            let id = $(this).data("target");
-            $.ajax({
-                url: `/workers/${id}`,
-                type: 'PUT',
-                success: function (result) {
-                    $('#modales').html("");
-                    $.notify("Empleado Eliminado Correctamente");
-                    TablaEmpleados.ajax.reload().draw();
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        });
-    });
-
-
-
-}
 function initParts() {
     let modales = "", select = "";
 
     $.ajax({
-        url: "/clients",
+        url: "/customers",
         type: 'GET',
         success: function (result) {
-            let clientes = JSON.parse(result).data;
+            let clientes = result.data
             clientes.forEach(cliente => {
                 select += `<option value="${cliente._id}"> ${cliente.name}</option>`
             });
@@ -493,16 +29,16 @@ function initParts() {
 
     let TablaPartes = $('#partes').DataTable({//Inicializar tabla de clientes.
         'ajax': {
-            'url': '/getparts',
+            'url': '/part',
             'type': 'GET'
         },
         columns: [
             { data: '_id' },
             { data: 'name' },
-            { data: 'part_number' },
+            { data: 'number' },
             { data: '_id' }
         ], "createdRow": function (row, data) {
-            $(row).attr("data-cliente", data.fk_customer);
+            $(row).attr("data-cliente", data.customer[0]._id);
             modales += `<div style="display:none" id="modal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog" aria-hidden="true"
             style="display: block; padding-right: 15px;">
             <div class="modal-dialog modal-lg">
@@ -522,7 +58,7 @@ function initParts() {
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" value="${data.name}" name="nombre" id="nombre-${data._id}" class="form-control col-md-7 col-xs-12"
+                                        <input type="text" value="${data.name}" name="name" id="nombre-${data._id}" class="form-control col-md-7 col-xs-12"
                                             placeholder="Nombre de la Parte" />
                                     </div>
                                 </div>
@@ -532,28 +68,19 @@ function initParts() {
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="part_number" value="${data.part_number}"  id="part_number-${data._id}" class="form-control col-md-7 col-xs-12"
+                                        <input type="text" name="number" value="${data.number}"  id="part_number-${data._id}" class="form-control col-md-7 col-xs-12"
                                             placeholder="Número de Parte" />
                                     </div>
                                 </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        Descripción
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="descripcion" value="${data.description}"  id="descripcion-${data._id}" class="form-control col-md-7 col-xs-12"
-                                            placeholder="Descripción" />
-                                    </div>
-                                </div>
+                               
                                 <div class="item form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                         Cliente
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select class="form-control col-md-7 col-xs-12" name="cliente" id="selec_cliente_${data._id}">
-                                        <option value="${data.fk_customer}" selected>${data.client}</option>
+                                        <select class="form-control col-md-7 col-xs-12" name="customer" id="selec_cliente_${data._id}">
+                                        <option value="${data.customer[0]._id}" selected>${data.customer[0].name}</option>
                                         ${select}
                                         </select>
                                     </div>
@@ -572,7 +99,7 @@ function initParts() {
 
             let op = $(row).children()[2];
             $(op).html(`<button type="button" class="btn btn-primary" data-toggle="modal" title="Editar" data-target="#modal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
-            $('#modales').html(modales);
+
         }, "columnDefs": [
             {
                 "targets": [0],
@@ -582,21 +109,24 @@ function initParts() {
     }).draw();
 
     TablaPartes.on('draw', function () {
+        $('#modales').html("");
+        $('#modales').html(modales);
+        modales = "";
         $('.editar').on('click', function () {
             let parte = $(this).data("target");
             let form = $(`#info-parte-${parte}`).serializeObject();
             form.id_parte = parte;
-            if (form.nombre !== undefined && form.descripcion !== undefined && form.cliente !== undefined && typeof form.nombre === "string" && typeof form.descripcion === "string" && typeof form.cliente === "string") {
+            if (form.name !== undefined && form.customer !== undefined && typeof form.name === "string" && typeof form.customer === "string") {
                 $.ajax({
-                    url: "/parts/0",
-                    type: 'POST',
+                    url: `/part/${parte}`,
+                    type: 'PUT',
                     dataType: "json",
                     data: form,
                     success: function (result) {
                         $(`#modal-${parte}`).modal('toggle');
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();
-                        $.notify("Parte Editada Correctamente");
+                        $.notify(result.message, 'success');
                         TablaPartes.ajax.reload().draw();
                     },
                     failure: function (result) {
@@ -613,7 +143,7 @@ function initParts() {
         });
         $('.eliminar').on('click', async function () {
             $.ajax({
-                url: "/part/" + $(this).data("target"),
+                url: "/part" + $(this).data("target"),
                 type: 'PUT',
                 success: function () {
                     $.notify("Parte Eliminada Correctamente");
@@ -633,15 +163,15 @@ function initParts() {
 
     $('#registroParte').on('click', function () {
         let form = $('#RegistrarParteForm').serializeObject();
-        if (form.nombre !== undefined && form.descripcion !== undefined && form.cliente !== undefined && typeof form.nombre === "string" && typeof form.descripcion === "string" && typeof form.cliente === "string") {
+        if (form.name !== undefined && form.customer !== undefined && typeof form.name === "string" && typeof form.customer === "string") {
             $.ajax({
-                url: "/parts/1",
+                url: "/part",
                 type: 'POST',
                 dataType: "json",
                 data: form,
                 success: function (result) {
                     TablaPartes.ajax.reload().draw()
-                    $.notify("Parte Registrada Correctamente");
+                    $.notify(result.message, 'success');
                     $(`#AgregarParteModal`).modal('toggle');
                 },
                 failure: function (result) {
@@ -662,16 +192,19 @@ function initClient() {
     let TablaClientes = $('#ClientesInfo').DataTable({
         ajax: {
             type: 'GET',
-            url: '/clients',
+            url: '/customers',
             async: 'false'
         },
         columns: [
-            { data: '_id' },
+            {
+                data: '_id',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
             { data: 'name' },
             { data: 'rfc' },
-            { data: 'pass' },
-            { data: 'hashed_pass' },
-            { data: 'type' },
+            { data: 'password' },
             { data: '_id' }
         ],
         "createdRow": function (row, data) {
@@ -687,42 +220,28 @@ function initClient() {
                     </div>
                     <div class="modal-body">
                         <form id="info-cliente-${data._id}" class="form-horizontal form-label-left">
-                            <div class="col-md-12">
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        Nombre del cliente
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" name="nombre" value="${data.name}" id="cliente_nombre_${data._id}" class="form-control col-md-7 col-xs-12"
-                                            placeholder="Nombre del Cliente" />
-                                    </div>
-                                </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        RFC
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" value="${data.rfc}" name="rfc" id="rfc_${data._id}" class="form-control col-md-7 col-xs-12"
-                                            placeholder="RFC" />
-                                    </div>
-                                </div>
-                                <div class="item form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                        Tipo de Cliente
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select class="form-control col-md-7 col-xs-12" name="nat" id="cliente_nat_${data._id}">
-                                            <option value="${data.type}" selected>Selección...</option>
-                                            <option value="0">Proveedor</option>
-                                            <option value="1">Cliente</option>
-                                            <option value="2">Cliente/Proveedor</option>
-                                        </select>
-                                    </div>
+                            
+                            <div class="item form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Nombre del cliente
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" name="name" value="${data.name}" id="cliente_nombre_${data._id}" class="form-control col-md-7 col-xs-12"
+                                        placeholder="Nombre del Cliente" />
                                 </div>
                             </div>
+                            <div class="item form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    RFC
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" value="${data.rfc}" name="rfc" id="rfc_${data._id}" class="form-control col-md-7 col-xs-12"
+                                        placeholder="RFC" />
+                                </div>
+                            </div>                                
+                            
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -732,16 +251,10 @@ function initClient() {
             </div>
         </div>`);
             $(row).attr("data-customer", data._id);
-            let op = $(row).children()[5];
+            let op = $(row).children()[4];
             $(op).html(`<button type="button" class="btn btn-primary editar" data-toggle="modal" title="Editar" data-target="#modal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
             $('#modales').html(modales);
         },
-        "columnDefs": [
-            {
-                "targets": [0],
-                "visible": false
-            }
-        ],
         "searching": false, "bPaginate": false, "ordering": false
     }).draw();
 
@@ -750,25 +263,25 @@ function initClient() {
             let cliente = $(this).data("target");
             let form = $(`#info-cliente-${cliente}`).serializeObject();
             form.id_cliente = cliente;
-            if (form.nombre !== undefined && form.rfc !== undefined && form.nat !== undefined && typeof form.nombre === "string" && typeof form.rfc === "string" && typeof form.nat === "string" && form.rfc.length >= 12) {
+            if (form.name !== undefined && form.rfc !== undefined && typeof form.name === "string" && typeof form.rfc === "string") {
                 $.ajax({
-                    url: "/client/0",
-                    type: 'POST',
+                    url: `/customer/${cliente}`,
+                    type: 'PUT',
                     dataType: "json",
                     data: form,
                     success: function (result) {
                         $(`#modal-${cliente}`).modal('toggle');
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();
-                        $.notify("Cliente Actualizado Correctamente");
+                        $.notify(result.message, 'success');
                         TablaClientes.ajax.reload().draw();
 
                     },
                     failure: function (result) {
-                        $.notify("Ha ocurrido un Error");
+                        $.notify(result.message);
                     },
                     error: function (result) {
-                        $.notify("Ha ocurrido un Error");
+                        $.notify(result.message);
                     }
                 });
             } else {
@@ -777,18 +290,19 @@ function initClient() {
 
         });
         $('.eliminar').on('click', function () {
+            let customer = $(this).data("target");
             $.ajax({
-                url: "/client/" + $(this).data("target"),
-                type: 'PUT',
-                success: function () {
-                    $.notify("Cliente Eliminado Correctamente");
+                url: `/customer/${customer}`,
+                type: 'DELETE',
+                success: function (result) {
+                    $.notify(result.message, 'success');
                     TablaClientes.ajax.reload().draw();
                 },
-                failure: function () {
-                    $.notify("Ha ocurrido un Error");
+                failure: function (result) {
+                    $.notify(result.message);
                 },
-                error: function () {
-                    $.notify("Ha ocurrido un Error");
+                error: function (result) {
+                    $.notify(result.message);
                 }
             });
         });
@@ -796,22 +310,22 @@ function initClient() {
 
     $('#registroCliente').on('click', function () {
         let form = $('#RegistrarClienteForm').serializeObject();
-        if (form.nombre !== undefined && form.rfc !== undefined && form.nat !== undefined && typeof form.nombre === "string" && typeof form.rfc === "string" && typeof form.nat === "string") {
+        if (form.name !== undefined && form.rfc !== undefined && typeof form.name === "string" && typeof form.rfc === "string") {
             $.ajax({
-                url: "/client/1",
+                url: "/customer",
                 type: 'POST',
                 dataType: "json",
                 data: form,
                 success: function (result) {
                     TablaClientes.ajax.reload().draw();
-                    $.notify("Cliente Registrado Correctamente");
+                    $.notify(result.message, 'success');
                     $("#AgregarClienteModal").modal('toggle');
                 },
                 failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
+                    $.notify(result.message);
                 },
                 error: function (result) {
-                    $.notify("Ha ocurrido un Error");
+                    $.notify(result.message);
                 }
             });
         } else {
@@ -850,11 +364,16 @@ function initReports() {
     $('#reportes').hide();
     let tabla_reportes = $('#tablareportes').DataTable({
         columns: [
-            { data: 'ServiceCode' },
-            { data: `s_date` },
-            { data: 'id' }
+            {
+                data: '_id',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'ServiceName' },
+            { data: '_id' }
         ], "createdRow": function (row, data) {
-            modal += `<div style="display:none" id="InfoReporteModal-${data.id}" class="modal fade in" tabindex="-1" role="dialog"
+            modal += `<div style="display:none" id="InfoReporteModal-${data._id}" class="modal fade in" tabindex="-1" role="dialog"
             aria-hidden="true" style="display: block; padding-right: 15px;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -862,97 +381,82 @@ function initReports() {
                         <button type="button" class="close" data-dismiss="modal">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="modal-label-${data.id}">Información de Reporte</h4>
+                        <h4 class="modal-title" id="modal-label-${data._id}">Información de Reporte</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <form id="InfoReporteForm-${data.id}" class="form-horizontal form-label-left">
+                            <form id="InfoReporteForm-${data._id}" class="form-horizontal form-label-left">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Name Of Service</label>
-                                        <input type="text" value="${data.ServiceCode}" class="form-control" id="codeService" name="ServiceCode"
+                                        <input type="text" value="${data.ServiceName}" class="form-control" id="codeService" name="ServiceCode"
                                             placeholder="Enter Service Name">
                                     </div>
                                     <div class="form-group">
                                         <label>Invoice Number</label>
                                         <input type="text" value="${data.invoice}" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number">
                                     </div>
-                                    <div class="form-group">
-                                        <label>Inspection Percentage</label>
-                                        <input type="number" class="form-control activity" id="insecPortcentage" value="${data.inspection}" name="inspection"
-                                            placeholder="Enter Inspection Percentage">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Rework Percentage</label>
-                                        <input type="number" class="form-control activity" id="reworkPercentage" value="${data.rework}" name="rework"
-                                            placeholder="Enter Rework Percentage">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Sampling Percentage</label>
-                                        <input type="number" value="${data.sampling}" class="form-control activity" id="samplingPercentage" name="sampling"
-                                            placeholder="Enter Supplier's Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Partial Rework Percentage</label>
-                                        <input type="number" class="form-control activity" id="partialRework" value="${data.partialRework}" name="partialRework"
-                                            placeholder="Enter Partial Rework Percentage">
-                                    </div>
+                                   
+                                    
+                                    
                                 </div>
                                 <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Lot Number QMC</label>
-                                        <input type="text" value="${data.lot_number}" class="form-control" id="numberQMC" name="LotNumberQMC"
+                                        <input type="text" value="${data.LotNumber}" class="form-control" id="numberQMC" name="LotNumberQMC"
                                             placeholder="Enter Lot Number for QMC">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Start Date</label>
-                                        <input type=text name='fecha_inicio' value="${data.fecha_inicio}" placeholder="Fecha de Ingreso" class="form-control"
-                                            id="fecha_inicio" aria-describedby="inputSuccess2Status">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>End Date</label>
-                                        <input type=text name='fecha_fin' placeholder="Fecha de Ingreso" value="${data.fecha_fin}" class="form-control"
-                                            id="fecha_fin" aria-describedby="inputSuccess2Status">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Service Status</label>
-                                        <div id="status" class="form-control"></div>
-                                    </div>
+                                    </div>                                                             
                                 </div>
 
                             </form>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary editar"  data-form="#InfoReporteForm-${data.id}" data-id="${data.id}">Guardar</button>
+                        <button type="button" class="btn btn-primary editar"  data-form="#InfoReporteForm-${data._id}" data-id="${data._id}">Guardar</button>
                     </div>
                 </div>
             </div>
         </div>`
 
             let op = $(row).children()[2];
-            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data.id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data.id}"><span class="fa fa-edit"></span></button><button data-target="${data.id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button><button type="button" class="btn btn-success " data-toggle="modal"  title="Notificar" data-target="#SendEmailModal"><span class="fa fa-bell"></span></button>`);
+            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data._id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button><button type="button" class="btn btn-success " data-toggle="modal"  title="Notificar" data-target="#SendEmailModal"><span class="fa fa-bell"></span></button>`);
         }, 'searching': false
     });
-
     $.ajax({
-        url: "/clients",
+        url: "/type",
+        type: 'GET',
+        success: function (result) {
+            let select = "<option value='0'>Seleccionar Modelo...</option>";
+            let models = result.data;
+
+            models.forEach(model => {
+                select += `<option value="${model._id}">${model.name}</option>`;
+            });
+            $('#selectType').html(select);
+        },
+        failure: function (result) {
+            $.notify(result.message);
+        },
+        error: function (result) {
+            $.notify(result.message);
+        }
+    });
+    $.ajax({
+        url: "/customers",
         type: 'GET',
         success: function (result) {
             let botones = "";
             let select = "<option value='0'>Seleccionar Cliente...</option>";
-            let clientes = JSON.parse(result).data;
+            let clientes = result.data;
 
             clientes.forEach(cliente => {
                 botones += `<a data-customer="${cliente._id}" class="btn btn-danger btn-lg btn-block btn-huge cliente">Reportes
                 ${cliente.name}</a>`;
-
-                select += `<option value="${cliente._id}">${cliente.name}</option>`
-
+                select += `<option value="${cliente._id}">${cliente.name}</option>`;
             });
             $('#clientes').html(botones);
-            $('#selec_cliente').html(select);
+            $('#selectCustomer').html(select);
             $('.cliente').on('click', function () {
                 $('.tipo').hide();
                 let cliente = $(this).data('customer');
@@ -962,26 +466,26 @@ function initReports() {
             });
         },
         failure: function (result) {
-            $.notify("Ha ocurrido un Error");
+            $.notify(result.message);
         },
         error: function (result) {
-            $.notify("Ha ocurrido un Error");
+            $.notify(result.message);
         }
     });
     $.ajax({
-        url: "/getReports",
+        url: "/type",
         type: 'GET',
         success: function (result) {
             let botones = "";
-            let reportes = JSON.parse(result).data;
+            let reportes = result.data;
             reportes.forEach(reporte => {
-                botones += `<a data-type="${reporte._id}" data-owner="${reporte.customer}" class="btn btn-primary btn-lg btn-block btn-huge tipo">${reporte.type}</a>`;
+                botones += `<a data-type="${reporte._id}" data-owner="${reporte.customer[0]._id}" class="btn btn-primary btn-lg btn-block btn-huge tipo">${reporte.name}</a>`;
             });
 
             $('#tipos').html(botones);
             $('.tipo').hide();
             $('.tipo').on('click', function () {
-                let tipo = '/getReportByType/' + $(this).data("type");
+                let tipo = '/report/' + $(this).data("type");
                 report = $(this).data("type");
                 $('#reportes').show();
                 tabla_reportes.ajax.url(tipo).load();
@@ -998,16 +502,16 @@ function initReports() {
     $('#registroReporte').on('click', function () {
         if (report != 0 && client != 0) {
             let form = $('#RegistrarReporteForm').serializeObject();
-            form.client = client;
-            form.report = report;
+            form.type = report;
+            form.customer = client;
             $.ajax({
-                url: "/register_report",
+                url: "/report",
                 type: 'POST',
                 data: form,
                 dataType: "json",
                 success: function (result) {
                     $("#AgregarReporteModal").modal('toggle');
-                    $.notify("Reporte Registrado Correctamente", "success");
+                    $.notify(result.message, "success");
                     tabla_reportes.ajax.reload().draw();
 
                 },
@@ -1041,17 +545,17 @@ function initReports() {
                 buttons: {
                     confirmar: function () {
                         $.ajax({
-                            url: `/deleteReport/${b}`,
-                            type: 'POST',
+                            url: `/report/${b}`,
+                            type: 'DELETE',
                             success: function (result) {
-                                $.notify("Reporte Eliminado Correctamente");
+                                $.notify(result.message, 'success');
                                 tabla_reportes.ajax.reload().draw();
                             },
                             failure: function (result) {
-                                $.notify("Ha ocurrido un Error");;
+                                $.notify(result.message);
                             },
                             error: function (result) {
-                                $.notify("Ha ocurrido un Error");
+                                $.notify(result.message);
                             }
                         });
                     },
@@ -1063,11 +567,10 @@ function initReports() {
 
         });
         $('.editar').on('click', function () {
-            let form = $($(this).data('form')).serializeObject();
-            form.id = $(this).data('id');
+            let form = $($(this).data('form')).serializeObject();           
             $.ajax({
-                url: "/edit_report",
-                type: 'POST',
+                url: "/report/" + $(this).data('id'),
+                type: 'PUT',
                 dataType: 'json',
                 data: form,
                 success: function (result) {
@@ -1277,22 +780,36 @@ function initReports() {
                     return d.slice(0, -1) + '' + "]";
                 }
             }
-            $.ajax({
-                url: "/insertlogs",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
+            if (data.people != "" && data.shift != "" || 0 && data.hours != 0 && data.date != "00/00/0000") {
+                $.ajax({
+                    url: "/insertlogs",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        arrayTables[report - 1].ajax.reload().draw();
+                        $.notify(result.message, 'success');
+                    },
+                    failure: function (result) {
+                        $.notify("Ha ocurrido un Error");
+                    },
+                    error: function (result) {
+                        $.notify("Ha ocurrido un Error");
+                    }
+                });
+            } else {
+                $.dialog({
+                    title: 'Error',
+                    closeIcon: true,
+                    closeIconClass: 'fa fa-close',
+                    backgroundDismiss: true,
+                    escapeKey: true,
+                    closeAnimation: 'left',
+                    type: 'red',
+                    content: 'Faltan Campos Obligatorios por proporcionar'
+                });
+            }
+
         }
 
     });
@@ -1394,13 +911,13 @@ function initReports() {
         let td = $(this)
         if (!td.hasClass('toEdit')) {
             let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none; width:${td.width()}px">`);
             td.addClass('toEdit');
         }
     }).on('key-blur', function (e, datatable, cell) {
         let td = $(cell.node());
         if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
+            let id = td.closest('tr').data('id');//OK
             let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
             let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
             let value = td.find('input').val();
@@ -2093,8 +1610,238 @@ function initReports() {
     arrayTables.push(registros8);
     arrayTables.push(registros9);
 }
+function initTypes() {
+    let modales = "";
+    let select = "";
+    $.ajax({
+        url: "/customers",
+        type: 'GET',
+        success: function (result) {
+            select = "<option value='0'>Seleccionar Cliente...</option>";
+            let clientes = result.data;
 
+            clientes.forEach(cliente => {
+                select += `<option value="${cliente._id}">${cliente.name}</option>`;
+            });
+            $('#selectCustomer').html(select);
+        },
+        failure: function (result) {
+            $.notify(result.message);
+        },
+        error: function (result) {
+            $.notify(result.message);
+        }
+    });
+    let TypesTable = $('#types').DataTable({
+        ajax: {
+            url: '/type',
+            type: 'GET'
+        },
+        columns: [
+            {
+                data: '_id',
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            { data: 'name' },
+            { data: 'customer[0].name' },
+            { data: '_id' }
+        ],
+        "createdRow": function (row, data) {
+            let attrs = "";
+            for (let index = 0; index < data.attributes.length; index++) {
+                const attr = data.attributes[index];
 
+                attrs += ` <div class="row"> <form class="attr"> <div class="col-md-6"> <div class="item form-group"> <label class="control-label"> Nombre: <span class="required">*</span> </label> <input class="form-control" value="${attr.name}" name="name" /> </div> </div> <div class="col-md-5"> <div class="item form-group"> <label class="control-label"> Tipo de Dato <span class="required">*</span> </label> <select class="form-control" name="dataType" id="DataType"> <option value="${attr.dataType}">${attr.dataType}</option><option value="text">Texto</option> <option value="date">Fecha</option> <option value="number">Número</option> </select> </div> </div> <div class="col-md-1"> <div class="item form-group"> <button type="button" style="background-color:transparent; border:none;" onclick="$(this).parent().parent().parent().parent().remove()" data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button> </div> </div> </form> </div>`
+            }
+            modales += `<div style="display:none" id="EditarModeloModal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="myModalLabel">Registro de Modelos de Reporte</h4> </div> <div class="modal-body"><div class="row"> <form id="EditarModeloForm-${data._id}" class="form-horizontal form-label-left"> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Nombre del Modelo <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <input value="${data.name}" type="text" name="name" id="ModeloNombre-${data._id}" class="form-control col-md-7 col-xs-12" placeholder="Nombre del Modelo" /> </div> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Número de Parte <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <select class="form-control" name="customer" id="ModelCustomer-${data.id}"> <option value="${data.customer[0]._id}">${data.customer[0].name}</option>${select} </select> </div> </div> </form> <div class="pull-right"> <button data-target="#attrs-${data._id}" type="button" class="btn btn-danger addAttr" id="AddAttr-${data._id}"> <span class="fa fa-plus"></span> Agregar Atributo </button> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> <h3>Atributos</h3></label> <div id="attrs-${data._id}" class="col-md-12"> ${attrs} </div> </div> </div></div> <div class="modal-footer"> <button type="button" data-target="${data._id}" class="btn btn-primary EditarModelo">Guardar</button> </div> </div> </div> </div>`;
+            let op = $(row).children()[3];
+            $(op).html(`<button type="button" class="btn btn-primary editar" data-toggle="modal" title="Editar" data-target="#EditarModeloModal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
+        }
+    }).draw();
+    TypesTable.on('draw', function () {
+        $('#modales').html("");
+        $('#modales').html(modales);
+        modales = "";
+
+        $('.addAttr').on('click', function () {
+            $($(this).data('target')).append(`<div class="row">
+            <form class="attr">
+                <div class="col-md-6">
+                    <div class="item form-group">
+                        <label class="control-label">
+                            Nombre:
+                            <span class="required">*</span>
+                        </label>
+                        <input class="form-control" name="name" />
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="item form-group">
+                        <label class="control-label">
+                            Tipo de Dato
+                            <span class="required">*</span>
+                        </label>
+                        <select class="form-control" name="dataType" id="DataType">
+                            <option value="">Selecciona...</option>
+                            <option value="text">Texto</option>
+                            <option value="date">Fecha</option>
+                            <option value="number">Número</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="item form-group">
+                        <button type="button" style="background-color:transparent; border:none;" onclick="$(this).parent().parent().parent().parent().remove()"
+                            data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button>
+        
+                    </div>
+                </div>
+            </form>
+        </div>`);
+        });
+
+        $('.eliminar').on('click', function () {
+            let id = $(this).data("target");
+            $.ajax({
+                url: `/type/${id}`,
+                type: 'DELETE',
+                success: function (result) {
+                    $.notify(result.message, 'success');
+                    TypesTable.ajax.reload().draw();
+                },
+                failure: function (result) {
+                    $.notify(result.message);
+                },
+                error: function (result) {
+                    $.notify(result.message);
+                }
+            });
+        });
+
+        $('.EditarModelo').on('click', function () {
+            let info = $(`#EditarModeloForm-${$(this).data("target")}`).serializeObject();
+            let attrs = $(this).parent().parent().find('.attr');
+            info.attributes = [];
+            for (let index = 0; index < attrs.length; index++) {
+                const attr = $(attrs[index]).serializeObject();
+                attr.alias = attr.name.replace(/\s/g, "");
+                attr.default = "";
+                info.attributes.push(attr);
+
+            }
+            $.ajax({
+                url: `/type/${$(this).data('target')}`,
+                method: 'PUT',
+                dataType: 'json',
+                data: info,
+                success: function (result) {
+                    $(`#EditarModeloModal-${$(this).data('target')}`).modal('toggle');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    $.notify(result.message, 'success');
+                    TypesTable.ajax.reload().draw();
+                },
+                failure: function (result) {
+                    $.notify(result.message);
+                },
+                error: function (result) {
+                    $.notify(result.message);
+                }
+            });
+        });
+    })
+    $.ajax({
+        url: `/customers`,
+        type: 'GET',
+        success: function (result) {
+            let selection = ``;
+            let customers = result.data;
+            for (let index = 0; index < customers.length; index++) {
+                const customer = customers[index];
+                selection += `<option value="${customer._id}">${customer.name}</option>`
+            }
+            $('#ModelCustomer').html(selection);
+            selector = selection;
+        },
+        failure: function (result) {
+            $.notify(result.message);
+        },
+        error: function (result) {
+            $.notify(result.message);
+        }
+    });
+    $('#AddAttr').on('click', function () {
+        $('#attr').append(`
+        <div class="row">
+    <form class="attr">
+        <div class="col-md-6">
+            <div class="item form-group">
+                <label class="control-label">
+                    Nombre:
+                    <span class="required">*</span>
+                </label>
+                <input class="form-control" name="name" />
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="item form-group">
+                <label class="control-label">
+                    Tipo de Dato
+                    <span class="required">*</span>
+                </label>
+                <select class="form-control" name="dataType" id="DataType">
+                    <option value="">Selecciona...</option>
+                    <option value="text">Texto</option>
+                    <option value="date">Fecha</option>
+                    <option value="number">Número</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="item form-group">
+                <button type="button" style="background-color:transparent; border:none;'" onclick="$(this).parent().parent().parent().parent().remove()"
+                    data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button>
+
+            </div>
+        </div>
+    </form>
+</div>`);
+    });
+    $('#registrarModelo').on('click', function () {
+        let data = $('#RegistrarModeloForm').serializeObject();
+        data.attributes = [];
+        let attrs = $(this).parent().parent().find('.modal-body').find('.attr')
+        for (let index = 0; index < attrs.length; index++) {
+            const attr = $(attrs[index]).serializeObject();
+            data.attributes.push({
+                name: attr.name,
+                alias: attr.name.replace(/\s/g, ""),
+                dataType: attr.dataType,
+                default: "",
+            })
+        }
+
+        $.ajax({
+            url: `/type`,
+            dataType: 'json',
+            data: data,
+            type: 'POST',
+            success: function (result) {
+                $.notify(result.message, 'success');
+                $('#AgregarModeloModal').modal('toggle');
+                TypesTable.ajax.reload().draw();
+            },
+            failure: function (result) {
+                $.notify(result.message);
+            },
+            error: function (result) {
+                $.notify(result.message);
+            }
+        });
+    });
+}
 (function ($) {//Función para transformar las formas en json
     $.fn.serializeObject = function () {
 

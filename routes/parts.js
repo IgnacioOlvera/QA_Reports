@@ -1,8 +1,14 @@
 var con = require('../connection.js');
 var express = require('express')
 var api = express.Router();
+var PartController = require('../controllers/parts')
+//Backend con Mongo
+api.post('/part', PartController.SavePart);
+api.put('/part/:id',PartController.UpdatePart);
+api.delete('/part/:id',PartController.DeletePart);
+api.get('/part/:id?',PartController.getParts);
 
-
+//Backend con MySQL
 api.post('/parts/:b', function (req, res) {
     let parte = req.body;
     let b = req.params.b;//Bandera para decidir si es actualización o inserción
@@ -57,7 +63,7 @@ api.get('/getparts/:variant?', function (req, res) {
                 if (err) throw err
                 else {
 
-                    res.send('{"data":' + JSON.stringify(rows) + '}');
+                    res.send({ data: rows });
                 }
             });
         }

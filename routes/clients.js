@@ -1,11 +1,19 @@
 var con = require('../connection.js');
-var express = require('express')
+var express = require('express');
 var api = express.Router();
 var bcrypt = require('bcryptjs');
+var CustomerController = require('../controllers/customers');
+//Backend con MongoDB
+api.post('/customer', CustomerController.SaveCustomer);
+api.put('/customer/:id',CustomerController.UpdateCustomer);
+api.delete('/customer/:id',CustomerController.DeleteCustomer);
+api.get('/customers/:id?',CustomerController.getCustomers);
 
+
+//Bakend con MySQL
 function generatePassword() {
     var length = 8,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&/()=?¡][{}-_|°*+",
         retVal = "";
     for (var i = 0, n = charset.length; i < length; ++i) {
         retVal += charset.charAt(Math.floor(Math.random() * n));

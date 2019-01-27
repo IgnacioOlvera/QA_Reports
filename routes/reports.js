@@ -2,7 +2,29 @@ var con = require('../connection.js');
 var express = require('express');
 var nodemailer = require('nodemailer');
 var api = express.Router();
+var TypeController = require('../controllers/types');
+var ReportController = require('../controllers/reports');
+var LogController = require('../controllers/logs');
+//Backend con MongoDB
 
+//Tipos
+api.post('/type', TypeController.SaveType);
+api.delete('/type/:id', TypeController.DeleteType)
+api.put('/type/:id', TypeController.UpdateType);
+api.get('/type/:id?', TypeController.getTypes);
+//Reportes
+api.post('/report', ReportController.SaveReport);
+api.put('/report/:id', ReportController.UpdateReport);
+api.delete('/report/:id', ReportController.DeleteReport);
+api.get('/report/:type', ReportController.getReportsByType);
+//Logs
+api.post('/log', LogController.SaveLog);
+api.get('/log/:report', LogController.getLogs);
+api.put('/log/:id', LogController.UpdateLog);
+api.delete('/log/:id', LogController.DeleteLog);
+
+
+//Backend con MySQL
 api.get('/getReports', function (req, res) {
     try {
         con.query('select _id, fk_customer customer, type from report_type', function (err, rows) {
@@ -108,7 +130,7 @@ api.post('/insertlogs', function (req, res) {
             inserts += `(null, ${data.idReport},str_to_date(${(data.date) ? "'" + data.date + "'" : null},'%d/%m/%Y'),(select _id from parts where part_number = '${log.part_number || null}'),str_to_date(${(log.mfg_date) ? "'" + log.mfg_date + "'" : null},'%Y-%m-%d'),${(log.lot_number) ? "'" + log.lot_number + "'" : null},${(log.serial_number) ? "'" + log.serial_number + "'" : null},${log.box_pcs},${log.boxes_qty},${log.ng1 || 0},${log.ng2 || 0},${log.ng3 || 0},${log.ng4 || 0},${log.ng5 || 0},${log.ng6 || 0},${log.ng7 || 0},${log.ng8 || 0},${log.ng9 || 0},${log.ng10 || 0},${log.ng11 || 0},${log.ng12 || 0},${log.ng13 || 0},${log.ng14 || 0},${log.ng15 || 0},${log.ng16 || 0},${log.ng17 || 0},${log.ng18 || 0},${log.ok_pcs},${log.pending_pcs || null},${data.hours},${(log.color) ? "'" + log.color + "'" : null},${log.inspection || null},${data.shift || null},${(log.program) ? "'" + log.program + "'" : null},${(data.people) ? "'" + data.people + "'" : null},${(log.reempaque) ? "'" + log.reempaque + "'" : null},${(log.batch_number) ? "'" + log.batch_number + "'" : null}),`;
         }
         inserts = inserts.slice(0, -1);
-        con.query('insert into inspectionreports_logs values ' + inserts, function (err) {
+        con.query(`insert into inspectionreports_logs values ${inserts}`, function (err) {
             if (err) throw err
             else res.send({ message: 'Registros Realizados Correctamente' });
         })
