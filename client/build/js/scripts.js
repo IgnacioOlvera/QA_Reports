@@ -291,20 +291,38 @@ function initClient() {
         });
         $('.eliminar').on('click', function () {
             let customer = $(this).data("target");
-            $.ajax({
-                url: `/customer/${customer}`,
-                type: 'DELETE',
-                success: function (result) {
-                    $.notify(result.message, 'success');
-                    TablaClientes.ajax.reload().draw();
-                },
-                failure: function (result) {
-                    $.notify(result.message);
-                },
-                error: function (result) {
-                    $.notify(result.message);
+            $.confirm({
+                title: 'Eliminar Cliente',
+                content: '¿Desea eliminar el Client?',
+                type: 'red',
+                closeIcon: true,
+                closeIconClass: 'fa fa-close',
+                backgroundDismiss: true,
+                escapeKey: true,
+                closeAnimation: 'left',
+                buttons: {
+                    confirmar: function () {
+                        $.ajax({
+                            url: `/customer/${customer}`,
+                            type: 'DELETE',
+                            success: function (result) {
+                                $.notify(result.message, 'success');
+                                TablaClientes.ajax.reload().draw();
+                            },
+                            failure: function (result) {
+                                $.notify(result.message);
+                            },
+                            error: function (result) {
+                                $.notify(result.message);
+                            }
+                        });
+                    },
+                    cancelar: function () {
+                        $.alert('Acción Cancelada');
+                    }
                 }
             });
+
         });
     });
 
@@ -335,7 +353,7 @@ function initClient() {
 
 }
 function initReports() {
-    $('.logs').hide();
+    //$('.logs').hide();
     $('#reports').hide();
 
     var report = 0;
@@ -356,10 +374,6 @@ function initReports() {
         locale: {
             format: 'DD/MM/YYYY'
         }
-    });
-    $("#fecha_master").on('change', function () {
-        $($(`#registros${report}`).find('thead [name="act_date"]')).data('default', `${$(this).val()}`);
-        $(`#registros${report} tbody [name = 'act_date']`).val($(this).val());
     });
     $('#reportes').hide();
     let tabla_reportes = $('#tablareportes').DataTable({
@@ -420,7 +434,7 @@ function initReports() {
         </div>`
 
             let op = $(row).children()[2];
-            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data._id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button><button type="button" class="btn btn-success " data-toggle="modal"  title="Notificar" data-target="#SendEmailModal"><span class="fa fa-bell"></span></button>`);
+            $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data._id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data._id}"><span class="fa fa-edit"></span></button><button type="button" class="btn btn-success " data-toggle="modal"  title="Notificar" data-target="#SendEmailModal"><span class="fa fa-bell"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
         }, 'searching': false
     });
     $.ajax({
@@ -458,6 +472,8 @@ function initReports() {
             $('#clientes').html(botones);
             $('#selectCustomer').html(select);
             $('.cliente').on('click', function () {
+                $('.cliente').removeClass('active');
+                $(this).addClass('active')
                 $('.tipo').hide();
                 let cliente = $(this).data('customer');
                 client = cliente;
@@ -472,6 +488,7 @@ function initReports() {
             $.notify(result.message);
         }
     });
+    let a = "";
     $.ajax({
         url: "/type",
         type: 'GET',
@@ -485,6 +502,10 @@ function initReports() {
             $('#tipos').html(botones);
             $('.tipo').hide();
             $('.tipo').on('click', function () {
+                $('.tipo').removeClass('active');
+                $(this).addClass('active')
+                $('#title').html(`<h3>${$(this).html()}</h3>`)
+                a = $(this).html();
                 let tipo = '/report/' + $(this).data("type");
                 report = $(this).data("type");
                 $('#reportes').show();
@@ -526,10 +547,11 @@ function initReports() {
             $.notify("Reporte y/o cliente no seleccionados");
         }
     });
-    let options = "";
+    let tableLogs;
     tabla_reportes.on('draw', function () {
         $('#modales').html("");
         $('#modales').html(modal);
+
         modal = "";
         $('.eliminar').on('click', function () {
             let b = $(this).data('target');
@@ -567,7 +589,7 @@ function initReports() {
 
         });
         $('.editar').on('click', function () {
-            let form = $($(this).data('form')).serializeObject();           
+            let form = $($(this).data('form')).serializeObject();
             $.ajax({
                 url: "/report/" + $(this).data('id'),
                 type: 'PUT',
@@ -590,32 +612,144 @@ function initReports() {
         });
 
         $('.insertar').on('click', function () {
-            options = ``;
+            let tabla = "";
+            idReport = $(this).data('id');
+            $.ajax({
+                url: `/type/${$(this).data('type')}`,
+                method: 'GET',
+                success: function (result) {
+                    let model = result.data[0];
+                    report = model._id;
+                    let columns = [{
+                        data: '_id',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    }];
+                    tabla = `<h3>${a}</h3><table class="table table-striped table-bordered logs" id="info-${model._id}">
+                    <thead><tr><th>Item</th>`;
+                    for (let index = 0; index < model.attributes.length; index++) {
+                        const attr = model.attributes[index];
+                        tabla += `<th name="${attr.alias}" data-type="${attr.dataType || null}" data-default="${attr.default}">${attr.name}</th>`
+                        //Crear vector de columnas para ajax
+                        columns.push({ mData: `values.${attr.alias}`, defaultContent: "" });
+                    }
+                    tabla += `</tr></thead></table>`
+                    $('#logs').html(tabla);
+                    $('.logs').on('contextmenu', 'tr', function () {
+                        let identifier = $(this).data('id');
+                        $.confirm({
+                            title: 'Eliminar Reporte',
+                            content: '¿Desea eliminar el reporte?',
+                            type: 'red',
+                            closeIcon: true,
+                            closeIconClass: 'fa fa-close',
+                            backgroundDismiss: true,
+                            escapeKey: true,
+                            closeAnimation: 'left',
+                            buttons: {
+                                confirmar: function () {
+                                    $.ajax({
+                                        url: `/log/${identifier}`,
+                                        type: 'DELETE',
+                                        success: function (result) {
+                                            $.notify(result.message, 'success');
+                                            tableLogs.ajax.reload().draw();
+                                        },
+                                        failure: function (result) {
+                                            $.notify("Ha ocurrido un Error");;
+                                        },
+                                        error: function (result) {
+                                            $.notify("Ha ocurrido un Error");
+                                        }
+                                    });
+                                },
+                                cancelar: function () {
+                                    $.alert('Acción Cancelada');
+                                }
+                            }
+                        });
+                    });
+                    tableLogs = $(`#info-${model._id}`).on('key-focus', function (e, datatable, cell) {
+                        if ($(cell.node()).find('input').length != 0) {
+                            $($(cell.node()).find('input')[0]).focus();
+                        }
+                    }).on('dblclick', 'td', function () {
+                        let td = $(this);
+                        let type = $(td.closest('table').find('th')[td.index()]).data('type')
+                        if (td.hasClass('toEdit') != true && td.children().length == 0 && td.index() != 0) {
+                            let value = td.html()
+                            td.html(`<input value="${value}" type="${type}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
+                            td.addClass('toEdit');
+                        }
+                    }).on('key-blur', function (e, datatable, cell) {
+                        let td = $(cell.node());
+                        if (td.hasClass('toEdit')) {
+                            let fields = td.closest('table').find('th');
+                            let id = td.closest('tr').data('id');//ok                            
+                            let value = td.find('input').val();
+                            td.removeClass('toEdit');
+                            td.html(value)
+                            let data = {
+                                report: idReport,
+                                values: {}
+                            }
+                            for (let index = 1; index < td.closest('tr').children().length; index++) {
+                                const row = $(td.closest('tr').children()[index]);
+                                const alias = $(fields[index]).attr('name');
+                                data.values[alias] = row.html();
+                            }
+
+
+                            $.ajax({
+                                url: `/log/${id}`,
+                                type: 'PUT',
+                                dataType: 'json',
+                                data: data,
+                                success: function (result) {
+                                    $.notify(result.message, 'success');
+                                },
+                                failure: function (result) {
+                                    $.notify(result.message);
+                                },
+                                error: function (result) {
+                                    $.notify(result.message);
+                                }
+                            });
+                        }
+                    }).on('key', function (e, datatable, key, cell, originalEvent) {
+                        if (key == 13) {
+                            let td = $(cell.node());
+                            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
+                            let ntd = $(nrow).find('td')[td.index()];
+                            $(ntd).trigger('click');
+                        }
+                    }).DataTable({
+                        ajax: {
+                            url: `/log/${idReport}`,
+                            method: 'GET'
+                        },
+                        keys: true,
+                        'createdRow': function (row, data, dataIndex) {
+                            $(row).attr('data-id', data._id);
+                        },
+                        aoColumns: columns,
+                        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Save as Excel'
+                            }
+                        ]
+                    });
+                },
+                failure: function (result) { },
+                error: function (result) { }
+            });
             $(`#selectreport`).hide(50);
             $(`#reports`).show();
-            $(`#report${$(this).data('type')}`).show(50);
-            idReport = $(this).data('id');
-            arrayTables[report - 1].ajax.url(`/getReportLogs/${report}/${idReport}`).load();
-            $.ajax({
-                url: "/getparts/1",
-                type: 'GET',
-                success: function (result) {
-                    let data = JSON.parse(result).data;
-                    for (let index = 0; index < data.length; index++) {
-                        const element = data[index];
-                        if (element.fk_customer == client) {
-                            options += `<option value='${element.part_number}'>${element.part_number}</option>`
-                        }
-                    }
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");;
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
         });
+
 
     });
     $('#hours').on('change', function () {
@@ -624,28 +758,19 @@ function initReports() {
     $('#return').on('click', function () {
         $(`#selectreport`).show(50);
         $(`#reports`).hide();
-        $(`.logs`).hide();
     });
-
     $('#addLog').on('click', function () {
-        let fn = $(`#registros${report}`).find('th');
-        let data = "";
-        for (let index = 0; index < fn.length; index++) {
-            if ($(fn[index]).attr('name') == "part_number") {
-                data += `"${$(fn[index]).attr('name')}":"<select name='${$(fn[index]).attr('name')}' style='background:transparent; border: none'>${options}</select>",`;
-            } else {
-                data += `"${$(fn[index]).attr('name')}":"<input name='${$(fn[index]).attr('name')}' type='${$(fn[index]).data('type')}' value='${$(fn[index]).data('default')}' style='background:transparent; border: none'/>",`;
-            }
+        let fn = $(`#info-${report}`).find('th');
+        let data = { _id: "", values: {} }
 
+        for (let index = 1; index < fn.length; index++) {
+            data.values[$(fn[index]).attr('name')] = `<input  name='${$(fn[index]).attr('name')}' value='${$(fn[index]).data('default')}' type='${$(fn[index]).data('type')}' style='background:transparent; border: none'/>`;
         }
-        let newnode = arrayTables[report - 1].row.add(JSON.parse("{" + data.slice(0, -1) + "}")).draw().node();
+        let newnode = tableLogs.row.add(data).draw().node();
         $(newnode).addClass('new');
         $(newnode).css({ 'background-color': 'gray', 'color': 'black' });
+        $(newnode).find('[type = date]').val('2019-01-01');
     });
-
-
-
-
     $('#enviarCorreo').on('click', function () {
         let form = $('#InfoCorreo').serializeObject();
         for (let index = 0; index < form.emails.split(',').length; index++) {
@@ -719,75 +844,33 @@ function initReports() {
         });
     });
 
-    $('.logs').on('contextmenu', 'tr', function () {
-        let identifier = $(this).data('id');
-        $.confirm({
-            title: 'Eliminar Reporte',
-            content: '¿Desea eliminar el reporte?',
-            type: 'red',
-            closeIcon: true,
-            closeIconClass: 'fa fa-close',
-            backgroundDismiss: true,
-            escapeKey: true,
-            closeAnimation: 'left',
-            buttons: {
-                confirmar: function () {
-                    $.ajax({
-                        url: `/deleteLog/${identifier}`,
-                        type: 'GET',
-                        success: function (result) {
-                            $.notify(result.message, 'success');
-                            arrayTables[report - 1].ajax.reload().draw();
-                        },
-                        failure: function (result) {
-                            $.notify("Ha ocurrido un Error");;
-                        },
-                        error: function (result) {
-                            $.notify("Ha ocurrido un Error");
-                        }
-                    });
-                },
-                cancelar: function () {
-                    $.alert('Acción Cancelada');
-                }
-            }
-        });
-    });
 
     $('#submit').on('click', function () {
-        let newRows = $(`#registros${report}`).find('.new');
+        let newRows = $(`#logs`).find('.new');
         if (newRows.length != 0) {
-            let data = {
-                report: report,
-                client: client,
-                people: `${$('#employees').val()}`,
-                date: `${$('#fecha_master').val()}`,
-                shift: `${$('#shift').val()}`,
-                hours: `${eval($('#hours').val())}`,
-                idReport: idReport,
-                logs: function () {
-                    let d = "[";
-                    for (let index = 0; index < newRows.length; index++) {
-                        let cols = $(newRows[index]).find('input, select');
-                        let log = `{`;
-                        for (let index = 0; index < cols.length; index++) {
-                            let field = cols[index];
-                            log += `"${field.name}": "${$(field).val()}",`
-                        }
-                        log = log.slice(0, -1) + '},';
-                        d += log;
-                    }
-                    return d.slice(0, -1) + '' + "]";
+            let data = { data: [] };
+            for (let index = 0; index < newRows.length; index++) {
+                let log = {
+                    report: idReport,
+                    values: {}
                 }
+                let cols = $(newRows[index]).find('input');
+                for (let index = 0; index < cols.length; index++) {
+                    let field = cols[index];
+                    log.values[$(field).attr('name')] = $(field).val();
+                }
+                data.data.push(log)
+
             }
-            if (data.people != "" && data.shift != "" || 0 && data.hours != 0 && data.date != "00/00/0000") {
+            if (data.length != 0) {
                 $.ajax({
-                    url: "/insertlogs",
+                    url: "/log",
                     type: 'POST',
                     dataType: 'json',
                     data: data,
                     success: function (result) {
-                        arrayTables[report - 1].ajax.reload().draw();
+                        tableLogs.ajax.reload().draw();
+
                         $.notify(result.message, 'success');
                     },
                     failure: function (result) {
@@ -813,802 +896,6 @@ function initReports() {
         }
 
     });
-    //Tablas
-    let arrayTables = [];
-    let registros1 = $('#registros1').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `mfg_date` },
-            { data: 'lot_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'ng5' },
-            { data: 'ng6' },
-            { data: 'ng7' },
-            { data: 'total_pcs' },
-            { data: 'ng8' },
-            { data: 'ng9' },
-            { data: 'hours' },
-            { data: 'employees' }
-
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros2 = $('#registros2').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none; width:${td.width()}px">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');//OK
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: `act_date` },
-            { data: `part_number` },
-            { data: `mfg_date` },
-            { data: 'lot_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'ng5' },
-            { data: 'ng6' },
-            { data: 'ng7' },
-            { data: 'ng8' },
-            { data: 'ng9' },
-            { data: 'ng10' },
-            { data: 'ng11' },
-            { data: 'ng12' },
-            { data: 'ng13' },
-            { data: 'ng14' },
-            { data: 'ng15' },
-            { data: 'ng16' },
-            { data: 'ng17' },
-            { data: 'ng18' },
-            { data: 'total_pcs' },
-            { data: 'hours' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-
-    });
-    let registros3 = $('#registros3').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `mfg_date` },
-            { data: 'lot_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'ng5' },
-            { data: 'ng6' },
-            { data: 'ng7' },
-            { data: 'ng8' },
-            { data: 'ng9' },
-            { data: 'ng10' },
-            { data: 'ng11' },
-            { data: 'ng12' },
-            { data: 'ng13' },
-            { data: 'total_pcs' },
-            { data: 'hours' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros4 = $('#registros4').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `mfg_date` },
-            { data: 'lot_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'ng5' },
-            { data: 'ng6' },
-            { data: 'ng7' },
-            { data: 'ng8' },
-            { data: 'ng9' },
-            { data: 'ng10' },
-            { data: 'ng11' },
-            { data: 'ng12' },
-            { data: 'ng13' },
-            { data: 'ng14' },
-            { data: 'ng15' },
-            { data: 'total_pcs' },
-            { data: 'hours' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros5 = $('#registros5').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `inspection` },
-            { data: 'program' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'total_pcs' },
-            { data: 'hours' },
-            { data: 'shift' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros6 = $('#registros6').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `inspection` },
-            { data: 'program' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'total_pcs' },
-            { data: 'hours' },
-            { data: 'shift' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros7 = $('#registros7').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: 'program' },
-            { data: 'mfg_date' },
-            { data: 'batch_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'reempaque' },
-            { data: 'reempaque' },
-            { data: 'hours' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros8 = $('#registros8').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `mfg_date` },
-            { data: 'lot_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'ng5' },
-            { data: 'ng6' },
-            { data: 'total_pcs' },
-            { data: 'ng7' },
-            { data: 'ng8' },
-            { data: 'hours' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    let registros9 = $('#registros9').on('key-focus', function (e, datatable, cell) {
-        if ($(cell.node()).find('input').length != 0) {
-            $($(cell.node()).find('input')[0]).focus();
-        }
-    }).on('dblclick', 'td', function () {
-        let td = $(this)
-        if (!td.hasClass('toEdit')) {
-            let value = td.html()
-            td.html(`<input value="${value}" style="background-color:transparent; border:none; font-size:13px; box-shadow:none;">`);
-            td.addClass('toEdit');
-        }
-    }).on('key-blur', function (e, datatable, cell) {
-        let td = $(cell.node());
-        if (td.hasClass('toEdit')) {
-            let id = td.closest('tr').data('id');
-            let name = $($(td).closest('table').find('th')[$(td).index()]).attr('name');
-            let type = $($(td).closest('table').find('th')[$(td).index()]).data('type');
-            let value = td.find('input').val();
-            td.removeClass('toEdit');
-            td.html(value)
-            let data = { log: id, name: name, value: value, type: type };
-            $.ajax({
-                url: "/editLog",
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (result) {
-                    arrayTables[report - 1].ajax.reload().draw();
-                    $.notify(result.message, 'success');
-                },
-                failure: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                },
-                error: function (result) {
-                    $.notify("Ha ocurrido un Error");
-                }
-            });
-        }
-    }).on('key', function (e, datatable, key, cell, originalEvent) {
-        if (key == 13) {
-            let td = $(cell.node());
-            let nrow = td.closest('tbody').find('tr')[td.closest('tr').index() + 1]
-            let ntd = $(nrow).find('td')[td.index()];
-            $(ntd).trigger('click');
-        }
-    }).DataTable({
-        keys: true,
-        'createdRow': function (row, data, dataIndex) {
-            $(row).attr('data-id', data.id);
-        },
-        columns: [
-            {
-                data: 'id',
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            { data: 'act_date' },
-            { data: `part_number` },
-            { data: `mfg_date` },
-            { data: 'lot_number' },
-            { data: 'serial_number' },
-            { data: 'box_pcs' },
-            { data: 'boxes_qty' },
-            { data: 'ok_pcs' },
-            { data: 'pending_pcs' },
-            { data: 'ng1' },
-            { data: 'ng2' },
-            { data: 'ng3' },
-            { data: 'ng4' },
-            { data: 'ng5' },
-            { data: 'ng6' },
-            { data: 'total_pcs' },
-            { data: 'ng7' },
-            { data: 'ng8' },
-            { data: 'hours' },
-            { data: 'employees' }
-        ],
-        "ordering": false, "searching": false, "paging": false, dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excel',
-                text: 'Save as Excel'
-            }
-        ], 'scrollX': true
-    });
-    arrayTables.push(registros1);
-    arrayTables.push(registros2);
-    arrayTables.push(registros3);
-    arrayTables.push(registros4);
-    arrayTables.push(registros5);
-    arrayTables.push(registros6);
-    arrayTables.push(registros7);
-    arrayTables.push(registros8);
-    arrayTables.push(registros9);
 }
 function initTypes() {
     let modales = "";
@@ -1653,20 +940,22 @@ function initTypes() {
             for (let index = 0; index < data.attributes.length; index++) {
                 const attr = data.attributes[index];
 
-                attrs += ` <div class="row"> <form class="attr"> <div class="col-md-6"> <div class="item form-group"> <label class="control-label"> Nombre: <span class="required">*</span> </label> <input class="form-control" value="${attr.name}" name="name" /> </div> </div> <div class="col-md-5"> <div class="item form-group"> <label class="control-label"> Tipo de Dato <span class="required">*</span> </label> <select class="form-control" name="dataType" id="DataType"> <option value="${attr.dataType}">${attr.dataType}</option><option value="text">Texto</option> <option value="date">Fecha</option> <option value="number">Número</option> </select> </div> </div> <div class="col-md-1"> <div class="item form-group"> <button type="button" style="background-color:transparent; border:none;" onclick="$(this).parent().parent().parent().parent().remove()" data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button> </div> </div> </form> </div>`
+                attrs += `<li><div class="row"> <form class="attr"> <div class="col-md-6"> <div class="item form-group"> <label class="control-label"> Nombre: <span class="required">*</span> </label> <input class="form-control" value="${attr.name}" name="name" /> </div> </div> <div class="col-md-5"> <div class="item form-group"> <label class="control-label"> Tipo de Dato <span class="required">*</span> </label> <select class="form-control" name="dataType" id="DataType"> <option value="${attr.dataType}">${attr.dataType}</option><option value="text">Texto</option> <option value="date">Fecha</option> <option value="number">Número</option> </select> </div> </div> <div class="col-md-1"> <div class="item form-group"> <button type="button" style="background-color:transparent; border:none;" onclick="$(this).parent().parent().parent().parent().remove()" data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button> </div> </div> </form> </div></li>`
             }
-            modales += `<div style="display:none" id="EditarModeloModal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="myModalLabel">Registro de Modelos de Reporte</h4> </div> <div class="modal-body"><div class="row"> <form id="EditarModeloForm-${data._id}" class="form-horizontal form-label-left"> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Nombre del Modelo <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <input value="${data.name}" type="text" name="name" id="ModeloNombre-${data._id}" class="form-control col-md-7 col-xs-12" placeholder="Nombre del Modelo" /> </div> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Número de Parte <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <select class="form-control" name="customer" id="ModelCustomer-${data.id}"> <option value="${data.customer[0]._id}">${data.customer[0].name}</option>${select} </select> </div> </div> </form> <div class="pull-right"> <button data-target="#attrs-${data._id}" type="button" class="btn btn-danger addAttr" id="AddAttr-${data._id}"> <span class="fa fa-plus"></span> Agregar Atributo </button> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> <h3>Atributos</h3></label> <div id="attrs-${data._id}" class="col-md-12"> ${attrs} </div> </div> </div></div> <div class="modal-footer"> <button type="button" data-target="${data._id}" class="btn btn-primary EditarModelo">Guardar</button> </div> </div> </div> </div>`;
+            modales += `<div style="display:none" id="EditarModeloModal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="myModalLabel">Registro de Modelos de Reporte</h4> </div> <div class="modal-body"><div class="row"> <form id="EditarModeloForm-${data._id}" class="form-horizontal form-label-left"> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Nombre del Modelo <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <input value="${data.name}" type="text" name="name" id="ModeloNombre-${data._id}" class="form-control col-md-7 col-xs-12" placeholder="Nombre del Modelo" /> </div> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Número de Parte <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <select class="form-control" name="customer" id="ModelCustomer-${data.id}"> <option value="${data.customer[0]._id}">${data.customer[0].name}</option>${select} </select> </div> </div> </form> <div class="pull-right"> <button data-target="#attrs-${data._id}" type="button" class="btn btn-danger addAttr" id="AddAttr-${data._id}"> <span class="fa fa-plus"></span> Agregar Atributo </button> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> <h3>Atributos</h3></label> <div class="col-md-12"><ol id="attrs-${data._id}" class="ToSort"> ${attrs} </ol></div> </div> </div></div> <div class="modal-footer"> <button type="button" data-target="${data._id}" class="btn btn-primary EditarModelo">Guardar</button> </div> </div> </div> </div>`;
             let op = $(row).children()[3];
             $(op).html(`<button type="button" class="btn btn-primary editar" data-toggle="modal" title="Editar" data-target="#EditarModeloModal-${data._id}"><span class="fa fa-edit"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
         }
     }).draw();
+
     TypesTable.on('draw', function () {
         $('#modales').html("");
         $('#modales').html(modales);
         modales = "";
-
+        $('ol.ToSort').sortable();
         $('.addAttr').on('click', function () {
-            $($(this).data('target')).append(`<div class="row">
+            $($(this).data('target')).append(`<li>
+            <div class="row">
             <form class="attr">
                 <div class="col-md-6">
                     <div class="item form-group">
@@ -1699,28 +988,48 @@ function initTypes() {
                     </div>
                 </div>
             </form>
-        </div>`);
+        </div></li>`);
         });
 
         $('.eliminar').on('click', function () {
             let id = $(this).data("target");
-            $.ajax({
-                url: `/type/${id}`,
-                type: 'DELETE',
-                success: function (result) {
-                    $.notify(result.message, 'success');
-                    TypesTable.ajax.reload().draw();
-                },
-                failure: function (result) {
-                    $.notify(result.message);
-                },
-                error: function (result) {
-                    $.notify(result.message);
+            $.confirm({
+                title: 'Eliminar Modelo',
+                content: '¿Desea eliminar el Modelo?',
+                type: 'red',
+                closeIcon: true,
+                closeIconClass: 'fa fa-close',
+                backgroundDismiss: true,
+                escapeKey: true,
+                closeAnimation: 'left',
+                buttons: {
+                    confirmar: function () {
+                        $.ajax({
+                            url: `/type/${id}`,
+                            type: 'DELETE',
+                            success: function (result) {
+                                $.notify(result.message, 'success');
+                                TypesTable.ajax.reload().draw();
+                            },
+                            failure: function (result) {
+                                $.notify(result.message);
+                            },
+                            error: function (result) {
+                                $.notify(result.message);
+                            }
+                        });
+                    },
+                    cancelar: function () {
+                        $.alert('Acción Cancelada');
+                    }
                 }
             });
+
+
         });
 
         $('.EditarModelo').on('click', function () {
+            $('body').css('padding-right', '0px')
             let info = $(`#EditarModeloForm-${$(this).data("target")}`).serializeObject();
             let attrs = $(this).parent().parent().find('.attr');
             info.attributes = [];
@@ -1773,7 +1082,7 @@ function initTypes() {
         }
     });
     $('#AddAttr').on('click', function () {
-        $('#attr').append(`
+        $('#attr').append(`<li>
         <div class="row">
     <form class="attr">
         <div class="col-md-6">
@@ -1807,7 +1116,7 @@ function initTypes() {
             </div>
         </div>
     </form>
-</div>`);
+</div></li>`);
     });
     $('#registrarModelo').on('click', function () {
         let data = $('#RegistrarModeloForm').serializeObject();

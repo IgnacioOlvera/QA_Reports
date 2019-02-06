@@ -6,7 +6,11 @@ var ReportSchema = Schema({
     LotNumber: String,
     invoice: String,
     activities: {},
-    type: { type: Schema.ObjectId, ref: 'Type' }
+    type: { type: Schema.ObjectId, ref: 'Type' },
+    act_date: String,
+    employees: String,
+    shift: String,
+    hours: Number
 });
 
 module.exports = mongoose.model('Report', ReportSchema);

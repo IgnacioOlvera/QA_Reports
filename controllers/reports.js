@@ -21,12 +21,18 @@ function getReportsByType(req, res) {
 function SaveReport(req, res) {
     let report = new Report();
     let info = req.body;
-
+    console.log(info);
     report.ServiceName = info.ServiceName;
     report.LotNumber = info.LotNumber;
     report.invoice = info.invoice;
     report.activities = info.activities;
     report.type = info.type;
+    report.act_date = info.act_date;
+    report.employees = info.employees;
+    report.shift = info.shift;
+    report.hours = eval(info.hours);
+
+
 
     report.save(report, function (err) {
         if (err) {

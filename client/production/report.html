@@ -108,8 +108,31 @@
                                         <input type="text" class="form-control" id="numberQMC" name="LotNumber"
                                             placeholder="Enter Lot Number for QMC">
                                     </div>
-
-
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Activity Date</label>
+                                    <input type="text" class="form-control" name="act_date" id="fecha_master">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Employees</label>
+                                    <input type="text" id="employees" name="employees" placeholder="Empleados en Turno"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Turno</label>
+                                    <select id="shift" name="shift" class="form-control">
+                                        <option value="1">Primer Turno</option>
+                                        <option value="2">Segundo Turno</option>
+                                        <option value="3">Tercer Turno</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Invested Hours</label>
+                                    <input type="text" name="hours" placeholder="Formula" class="form-control" id="hours">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Calculated Hours=</label>
+                                    <label id="calculated">0</label>
                                 </div>
 
                             </form>
@@ -191,7 +214,7 @@
 
                                         </div>
                                         <div class="col-md-4" id="reportes">
-
+                                            <label id="title"></label>
                                             <table id="tablareportes" class="table table-striped table-bordered">
                                                 <thead>
                                                     <th>Item</th>
@@ -203,33 +226,6 @@
                                     </div>
                                 </div>
                                 <div id="reports">
-                                    <div class="col-md-12">
-                                        <div class="form-group col-md-4">
-                                            <label>Activity Date</label>
-                                            <input type="text" class="form-control" name="act_date" id="fecha_master">
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Employees</label>
-                                            <input type="text" id="employees" placeholder="Empleados en Turno" class="form-control">
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Turno</label>
-                                            <select id="shift" class="form-control">
-                                                <option value="1">Primer Turno</option>
-                                                <option value="2">Segundo Turno</option>
-                                                <option value="3">Tercer Turno</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Invested Hours</label>
-                                            <input type="text" placeholder="Formula" class="form-control" id="hours">
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Calculated Hours=</label>
-                                            <label id="calculated">0</label>
-                                        </div>
-
-                                    </div>
                                     <button type="button" class="btn btn-danger" id="return">
                                         <span class="fa fa-arrow-left"></span> Return
                                     </button>
@@ -238,8 +234,10 @@
                                             <span class="fa fa-plus"></span> New Log
                                         </button>
                                     </div>
-                                    &nbsp;
-                                    <div id="report1" class="logs">
+                                    <div id="logs">
+
+                                    </div>
+                                    <!-- <div id="report1" class="logs">
                                         <h1>Registros A.R. Parker Trutec Irapuato</h1>
                                         <table id="registros1" class="table table-striped table-bordered">
                                             <thead>
@@ -612,7 +610,7 @@
                                                 </tr>
                                             </thead>
                                         </table>
-                                    </div>
+                                    </div> -->
                                     <div class="pull-right">
                                         <button type="button" class="btn btn-danger" id="submit">
                                             <span class="fa fa-arrow-right"></span> Submit

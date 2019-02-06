@@ -30,7 +30,10 @@
     <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-
+    <!-- jQuery confirm -->
+    <link href="../vendors/jquery-confirm/css/jquery-confirm.css" rel="stylesheet">
+    <!-- jQuery Sortable -->
+    <link href="../vendors/jquery-sortable/jquery-sortable.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
 </head>
@@ -78,9 +81,12 @@
                             </div>
                             <div class="item form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    <h3>Atributos</h3>                                    
+                                    <h3>Atributos</h3>
                                 </label>
-                                <div id="attr" class="col-md-12">
+                                <div class="col-md-12">
+                                    <ol class="ToSort" id="attr">
+
+                                    </ol>
 
                                 </div>
                             </div>
@@ -203,6 +209,10 @@
     <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <!-- jQuery Confirm -->
+    <script src="../vendors/jquery-confirm/js/jquery-confirm.js"></script>
+    <!-- jQuery Sortable -->
+    <script src="../vendors/jquery-sortable/jquery-sortable.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
     <script src="../build/js/notify.js"></script>
