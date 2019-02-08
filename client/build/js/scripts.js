@@ -387,51 +387,21 @@ function initReports() {
             { data: 'ServiceName' },
             { data: '_id' }
         ], "createdRow": function (row, data) {
-            modal += `<div style="display:none" id="InfoReporteModal-${data._id}" class="modal fade in" tabindex="-1" role="dialog"
-            aria-hidden="true" style="display: block; padding-right: 15px;">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title" id="modal-label-${data._id}">Información de Reporte</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <form id="InfoReporteForm-${data._id}" class="form-horizontal form-label-left">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Name Of Service</label>
-                                        <input type="text" value="${data.ServiceName}" class="form-control" id="codeService" name="ServiceCode"
-                                            placeholder="Enter Service Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Invoice Number</label>
-                                        <input type="text" value="${data.invoice}" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number">
-                                    </div>
-                                   
-                                    
-                                    
-                                </div>
-                                <div class="col-md-6">
+            modal += `<div style="display:none" id="InfoReporteModal-${data._id}" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="modal-label-${data._id}">Información de Reporte</h4> </div> <div class="modal-body"> <div class="row"> <form id="InfoReporteForm-${data._id}" class="form-horizontal form-label-left"> <div class="col-md-6"> <div class="form-group"> <label>Name Of Service</label> <input type="text" value="${data.ServiceName}" class="form-control" id="codeService" name="ServiceCode" placeholder="Enter Service Name"> </div> <div class="form-group"> <label>Invoice Number</label> <input type="text" value="${data.invoice}" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>Lot Number QMC</label> <input type="text" value="${data.LotNumber}" class="form-control" id="numberQMC" name="LotNumberQMC" placeholder="Enter Lot Number for QMC"> </div> </div> </form><label><h3>Human Resource</h3></label><div id="employees-${data._id}"><div class="pull-right" style="display:block;"><button data-target="#employees-${data._id}" type="button" class="btn btn-warning addEmployees">Agregar Operario <span class="fa fa-plus"></span></button> </div>`;
 
-                                    <div class="form-group">
-                                        <label>Lot Number QMC</label>
-                                        <input type="text" value="${data.LotNumber}" class="form-control" id="numberQMC" name="LotNumberQMC"
-                                            placeholder="Enter Lot Number for QMC">
-                                    </div>                                                             
-                                </div>
+            for (let index = 0; index < data.hr.employees.length; index++) {
+                const element = data.hr.employees[index];
+                modal += `<div class="row" style="display:inline-block"> <form class="employees"> <div class="form-group col-md-4"> <label>Employee</label> <input value="${element.employees}" type="text" id="employees" name="employees" placeholder="Empleados en Turno" class="form-control"> </div> <div class="form-group col-md-3"> <label>Turno</label> <select id="shift" name="shift" class="form-control"><option value="${element.shift}">Turno ${element.shift}</option> <option value="1">Primer Turno</option> <option value="2">Segundo Turno</option> <option value="3">Tercer Turno</option> </select> </div> <div class="form-group col-md-4"> <label>Invested Hours</label> <input type="text" value="${element.hours}" name="hours" placeholder="Hours Worked" class="form-control" id="hours"> </div> <div class="col-xs-1"><button style="border:none; background-color: transparent" onclick="$(this).closest('.row').remove()"><span class="fa fa-close"></span></button></div> </form> </div>`;
+            }
 
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary editar"  data-form="#InfoReporteForm-${data._id}" data-id="${data._id}">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>`
+            modal += `</div><hr><div id="supervisors-${data._id}"> <div class="pull-right"><button data-target="#supervisors-${data._id}" type="button" class="btn btn-warning addSupervisor">Agregar Supervisor <span class="fa fa-plus"></span></button> </div>`;
+
+            for (let index = 0; index < data.hr.supervisors.length; index++) {
+                const element = data.hr.supervisors[index];
+                modal += `<div class="row" style="display:inline-block"> <form class="supervisor"> <div class="form-group col-md-4"> <label>Supervisors</label> <input value="${element.employees}" type="text" id="supervisors" name="employees" placeholder="Empleados en Turno" class="form-control"> </div> <div class="form-group col-md-3"> <label>Turno</label> <select id="shift" name="shift" class="form-control"><option value="${element.shift}">Turno ${element.shift}</option> <option value="1">Primer Turno</option> <option value="2">Segundo Turno</option> <option value="3">Tercer Turno</option> </select> </div> <div class="form-group col-md-4"> <label>Invested Hours</label> <input value="${element.hours}" type="text" name="hours" placeholder="Hours Worked" class="form-control" id="hours"> </div> <div class="col-xs-1"><button style="border:none; background-color: transparent" onclick="$(this).closest('.row').remove()"><span class="fa fa-close"></span></button></div> </form></div>`
+            }
+
+            modal += `</div></div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary editar"  data-form="#InfoReporteForm-${data._id}" data-id="${data._id}">Guardar</button> </div> </div> </div> </div>`;
 
             let op = $(row).children()[2];
             $(op).html(`<button type="button" class="btn btn-primary insertar" data-type="${data.type}" data-id="${data._id}" title="Subir Información"><span class="fa fa-arrow-up"></span></button><button type="button" class="btn btn-warning " data-toggle="modal"  title="Editar" data-target="#InfoReporteModal-${data._id}"><span class="fa fa-edit"></span></button><button type="button" class="btn btn-success " data-toggle="modal"  title="Notificar" data-target="#SendEmailModal"><span class="fa fa-bell"></span></button><button data-target="${data._id}" type="button" title="Eliminar" class="btn btn-danger eliminar"><span class="fa fa-times"></span></button>`);
@@ -523,8 +493,22 @@ function initReports() {
     $('#registroReporte').on('click', function () {
         if (report != 0 && client != 0) {
             let form = $('#RegistrarReporteForm').serializeObject();
+            let employees = $('#employees').find('.employees');
+            let supervisors = $('#supervisor').find('.supervisor');
+            form.hr = { employees: [], supervisors: [] }
+            for (let index = 0; index < employees.length; index++) {
+                const element = $(employees[index]);
+                form.hr.employees.push(element.serializeObject());
+
+            }
+            for (let index = 0; index < supervisors.length; index++) {
+                const element = $(supervisors[index]);
+                form.hr.supervisors.push(element.serializeObject());
+
+            }
             form.type = report;
             form.customer = client;
+
             $.ajax({
                 url: "/report",
                 type: 'POST',
@@ -552,6 +536,15 @@ function initReports() {
         $('#modales').html("");
         $('#modales').html(modal);
 
+        $('.addEmployees').on('click', function () {
+            let target = $(this).data('target');
+            $(target).append(`<div class="row" style="display:inline-block"> <form class="employees"> <div class="form-group col-md-4"> <label>Employee</label> <input type="text" id="employees" name="employees" placeholder="Empleados en Turno" class="form-control"> </div> <div class="form-group col-md-3"> <label>Turno</label> <select id="shift" name="shift" class="form-control"> <option value="1">Primer Turno</option> <option value="2">Segundo Turno</option> <option value="3">Tercer Turno</option> </select> </div> <div class="form-group col-md-4"> <label>Invested Hours</label> <input type="text" name="hours" placeholder="Hours Worked" class="form-control" id="hours"> </div> <div class="col-xs-1"><button style="border:none; background-color: transparent" onclick="$(this).closest('.row').remove()"><span class="fa fa-close"></span></button></div> </form> </div>`);
+        });
+
+        $('.addSupervisor').on('click', function () {
+            let target = $(this).data('target');
+            $(target).append(`<div class="row" style="display:inline-block"> <form class="supervisor"> <div class="form-group col-md-4"> <label>Supervisors</label> <input type="text" id="employees" name="employees" placeholder="Empleados en Turno" class="form-control"> </div> <div class="form-group col-md-3"> <label>Turno</label> <select id="shift" name="shift" class="form-control"> <option value="1">Primer Turno</option> <option value="2">Segundo Turno</option> <option value="3">Tercer Turno</option> </select> </div> <div class="form-group col-md-4"> <label>Invested Hours</label> <input type="text" name="hours" placeholder="Hours Worked" class="form-control" id="hours"> </div> <div class="col-xs-1"><button style="border:none; background-color: transparent" onclick="$(this).closest('.row').remove()"><span class="fa fa-close"></span></button></div> </form> </div>`)
+        });
         modal = "";
         $('.eliminar').on('click', function () {
             let b = $(this).data('target');
@@ -590,17 +583,32 @@ function initReports() {
         });
         $('.editar').on('click', function () {
             let form = $($(this).data('form')).serializeObject();
+            form.hr = { employees: [], supervisors: [] }
+            let employees = $(this).parent().parent().find('.row').find('.employees')
+            let supervisors = $(this).parent().parent().find('.row').find('.supervisor')
+
+            for (let index = 0; index < employees.length; index++) {
+                const element = $(employees[index]);
+                form.hr.employees.push(element.serializeObject());
+
+            }
+            for (let index = 0; index < supervisors.length; index++) {
+                const element = $(supervisors[index]);
+                form.hr.supervisors.push(element.serializeObject());
+
+            }
             $.ajax({
                 url: "/report/" + $(this).data('id'),
                 type: 'PUT',
                 dataType: 'json',
                 data: form,
                 success: function (result) {
+                    $('body').css('padding-right', '0px');
                     $(`#InfoReporteModal-${form.id}`).modal('toggle');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     tabla_reportes.ajax.reload().draw();
-                    $.notify("Reporte Actualizado Correctamente");
+                    $.notify("Reporte Actualizado Correctamente", 'success');
                 },
                 failure: function (result) {
                     $.notify("Ha ocurrido un Error");
@@ -746,17 +754,15 @@ function initReports() {
                 failure: function (result) { },
                 error: function (result) { }
             });
-            $(`#selectreport`).hide(50);
+            $(`#selectreport`).hide();
             $(`#reports`).show();
         });
 
 
     });
-    $('#hours').on('change', function () {
-        $('#calculated').html(eval($(this).val()))//estará lanzando error
-    });
+
     $('#return').on('click', function () {
-        $(`#selectreport`).show(50);
+        $(`#selectreport`).show();
         $(`#reports`).hide();
     });
     $('#addLog').on('click', function () {
@@ -774,8 +780,7 @@ function initReports() {
     $('#enviarCorreo').on('click', function () {
         let form = $('#InfoCorreo').serializeObject();
         for (let index = 0; index < form.emails.split(',').length; index++) {
-            const element = form.emails.split(',')[index];
-            console.log(element);
+            const element = form.emails.replace(/\s/g, "X").split(',')[index];
             if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(`${element}`) == false) {
                 $.confirm({
                     title: 'Error',
@@ -896,6 +901,17 @@ function initReports() {
         }
 
     });
+    $('#addEmployees').on('click', function () {
+        $('#employees').append(`<div class="row" style="display:inline-block"> <form class="employees"> <div class="form-group col-md-4"> <label>Employee</label> <input type="text" id="employees" name="employees" placeholder="Empleados en Turno" class="form-control"> </div> <div class="form-group col-md-3"> <label>Turno</label> <select id="shift" name="shift" class="form-control"> <option value="1">Primer Turno</option> <option value="2">Segundo Turno</option> <option value="3">Tercer Turno</option> </select> </div> <div class="form-group col-md-4"> <label>Invested Hours</label> <input type="text" name="hours" placeholder="Hours Worked" class="form-control" id="hours"> </div><div class="col-xs-1"><button style="border:none; background-color: transparent"
+        onclick="$(this).closest('.row').remove()"><span
+            class="fa fa-close"></span></button></div> </form> </div>`);
+    });
+
+    $('#addSupervisor').on('click', function () {
+        $('#supervisor').append(`<div class="row" style="display:inline-block"> <form class="supervisor"> <div class="form-group col-md-4"> <label>Supervisor</label> <input type="text" id="employees" name="employees" placeholder="Empleados en Turno" class="form-control"> </div> <div class="form-group col-md-3"> <label>Turno</label> <select id="shift" name="shift" class="form-control"> <option value="1">Primer Turno</option> <option value="2">Segundo Turno</option> <option value="3">Tercer Turno</option> </select> </div> <div class="form-group col-md-4"> <label>Invested Hours</label> <input type="text" name="hours" placeholder="Hours Worked" class="form-control" id="hours"> </div><div class="col-xs-1"><button style="border:none; background-color: transparent"
+        onclick="$(this).closest('.row').remove()"><span
+            class="fa fa-close"></span></button></div> </form> </div>`);
+    });
 }
 function initTypes() {
     let modales = "";
@@ -940,7 +956,7 @@ function initTypes() {
             for (let index = 0; index < data.attributes.length; index++) {
                 const attr = data.attributes[index];
 
-                attrs += `<li><div class="row"> <form class="attr"> <div class="col-md-6"> <div class="item form-group"> <label class="control-label"> Nombre: <span class="required">*</span> </label> <input class="form-control" value="${attr.name}" name="name" /> </div> </div> <div class="col-md-5"> <div class="item form-group"> <label class="control-label"> Tipo de Dato <span class="required">*</span> </label> <select class="form-control" name="dataType" id="DataType"> <option value="${attr.dataType}">${attr.dataType}</option><option value="text">Texto</option> <option value="date">Fecha</option> <option value="number">Número</option> </select> </div> </div> <div class="col-md-1"> <div class="item form-group"> <button type="button" style="background-color:transparent; border:none;" onclick="$(this).parent().parent().parent().parent().remove()" data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button> </div> </div> </form> </div></li>`
+                attrs += `<li><div class="row"> <form class="attr"> <div class="col-md-6"> <div class="item form-group"> <label class="control-label"> Nombre: <span class="required">*</span> </label> <input class="form-control" value="${attr.name}" name="name" /> </div> </div> <div class="col-md-5"> <div class="item form-group"> <label class="control-label"> Tipo de Dato <span class="required">*</span> </label> <select class="form-control" name="dataType" id="DataType"> <option value="${attr.dataType}">${attr.dataType}</option><option value="text">Texto</option> <option value="date">Fecha</option> <option value="number">Número</option> </select> </div> </div> <div class="col-md-1"> <div class="item form-group"> <button type="button" class="btn btn-primary" onclick="$(this).closest('li').remove()" title="Borrar"><span class="fa fa-close"></span></button> </div> </div> </form> </div></li>`
             }
             modales += `<div style="display:none" id="EditarModeloModal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="myModalLabel">Registro de Modelos de Reporte</h4> </div> <div class="modal-body"><div class="row"> <form id="EditarModeloForm-${data._id}" class="form-horizontal form-label-left"> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Nombre del Modelo <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <input value="${data.name}" type="text" name="name" id="ModeloNombre-${data._id}" class="form-control col-md-7 col-xs-12" placeholder="Nombre del Modelo" /> </div> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> Número de Parte <span class="required">*</span> </label> <div class="col-md-6 col-sm-6 col-xs-12"> <select class="form-control" name="customer" id="ModelCustomer-${data.id}"> <option value="${data.customer[0]._id}">${data.customer[0].name}</option>${select} </select> </div> </div> </form> <div class="pull-right"> <button data-target="#attrs-${data._id}" type="button" class="btn btn-danger addAttr" id="AddAttr-${data._id}"> <span class="fa fa-plus"></span> Agregar Atributo </button> </div> <div class="item form-group"> <label class="control-label col-md-3 col-sm-3 col-xs-12"> <h3>Atributos</h3></label> <div class="col-md-12"><ol id="attrs-${data._id}" class="ToSort"> ${attrs} </ol></div> </div> </div></div> <div class="modal-footer"> <button type="button" data-target="${data._id}" class="btn btn-primary EditarModelo">Guardar</button> </div> </div> </div> </div>`;
             let op = $(row).children()[3];
@@ -954,41 +970,7 @@ function initTypes() {
         modales = "";
         $('ol.ToSort').sortable();
         $('.addAttr').on('click', function () {
-            $($(this).data('target')).append(`<li>
-            <div class="row">
-            <form class="attr">
-                <div class="col-md-6">
-                    <div class="item form-group">
-                        <label class="control-label">
-                            Nombre:
-                            <span class="required">*</span>
-                        </label>
-                        <input class="form-control" name="name" />
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="item form-group">
-                        <label class="control-label">
-                            Tipo de Dato
-                            <span class="required">*</span>
-                        </label>
-                        <select class="form-control" name="dataType" id="DataType">
-                            <option value="">Selecciona...</option>
-                            <option value="text">Texto</option>
-                            <option value="date">Fecha</option>
-                            <option value="number">Número</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="item form-group">
-                        <button type="button" style="background-color:transparent; border:none;" onclick="$(this).parent().parent().parent().parent().remove()"
-                            data-toggle="modal" title="Editar"><span class="fa fa-close"></span></button>
-        
-                    </div>
-                </div>
-            </form>
-        </div></li>`);
+            $($(this).data('target')).append(`<li> <div class="row"> <form class="attr"> <div class="col-md-6"> <div class="item form-group"> <label class="control-label"> Nombre: <span class="required">*</span> </label> <input class="form-control" name="name" /> </div> </div> <div class="col-md-5"> <div class="item form-group"> <label class="control-label"> Tipo de Dato <span class="required">*</span> </label> <select class="form-control" name="dataType" id="DataType"> <option value="">Selecciona...</option> <option value="text">Texto</option> <option value="date">Fecha</option> <option value="number">Número</option> </select> </div> </div> <div class="col-md-1"> <div class="item form-group"> <button type="button" class="btn btn-primary" onclick="$(this)closest('li').remove()" title="Eliminar"><span class="fa fa-close"></span></button> </div> </div> </form> </div></li>`);
         });
 
         $('.eliminar').on('click', function () {

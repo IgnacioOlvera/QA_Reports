@@ -28,9 +28,8 @@ function SaveReport(req, res) {
     report.activities = info.activities;
     report.type = info.type;
     report.act_date = info.act_date;
-    report.employees = info.employees;
-    report.shift = info.shift;
-    report.hours = eval(info.hours);
+    report.hr.employees = info.hr.employees;
+    report.hr.supervisors = info.hr.supervisors;
 
 
 

@@ -10,7 +10,11 @@ var ReportSchema = Schema({
     act_date: String,
     employees: String,
     shift: String,
-    hours: Number
+    hours: Number,
+    hr: {
+        employees: { type: Array, default: [] },
+        supervisors: { type: Array, default: [] }
+    }
 });
 
 module.exports = mongoose.model('Report', ReportSchema);

@@ -1,17 +1,8 @@
-var mongoose = require('mongoose').Types;
 var Log = require('../models/log');
 //Consulta de Registros
 function getLogs(req, res) {
     if (req.params.report) {
         let report = req.params.report
-        // Log.aggregate([{ $match: { report: mongoose.ObjectId(report) } }, { $lookup: { from: "parts", localField: "values.part", foreignField: "_id", as: "values.part" } }]).exec(function (err, logs) {
-        //     if (err) {
-        //         res.status(500).send({ message: "Error al Obtener Registros" })
-        //     } else {
-        //         res.status(200).send({ data: logs })
-        //     }
-        // });
-
         Log.find({ "report": report }, { "values": 1 }, function (err, logs) {
             if (err) {
                 res.status(500).send({ message: "Error al Obtener Registros" })
