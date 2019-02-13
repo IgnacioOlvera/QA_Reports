@@ -1,4 +1,4 @@
-$('#vinetas').html(`<ul class="nav side-menu"> <li> <a href='/report'> <i class="fa fa-home"></i> Inicio </a> </li><li> <a href='/client'> <i class="fa fa-industry"></i> Clientes </a> </li><li> <a href='/parts'> <i class="fa fa-wrench"></i> Partes </a> </li><li> <a href='/types'> <i class="fa fa-puzzle-piece"></i> Reports Models </a> </li></ul> `);
+$('#vinetas').html(`<ul class="nav side-menu"> <li> <a href='/report'> <i class="fa fa-home"></i> Inicio </a> </li><li> <a href='/client'> <i class="fa fa-industry"></i> Clientes </a> </li><li> <a href='/types'> <i class="fa fa-puzzle-piece"></i> Reports Models </a> </li></ul> `);
 
 function initParts() {
     let modales = "", select = "";
@@ -202,10 +202,10 @@ function initClient() {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            { data: 'name' },
-            { data: 'rfc' },
-            { data: 'password' },
-            { data: '_id' }
+            { data: 'name', defaultContent: "" },
+            { data: 'user', defaultContent: "" },
+            { data: 'password', defaultContent: "" },
+            { data: '_id', defaultContent: "" }
         ],
         "createdRow": function (row, data) {
             modales += (`<div style="display:none" id="modal-${data._id}" class="modal fade  in" tabindex="-1" role="dialog"
@@ -233,12 +233,12 @@ function initClient() {
                             </div>
                             <div class="item form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    RFC
+                                    User
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" value="${data.rfc}" name="rfc" id="rfc_${data._id}" class="form-control col-md-7 col-xs-12"
-                                        placeholder="RFC" />
+                                        placeholder="User" />
                                 </div>
                             </div>                                
                             

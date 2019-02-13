@@ -18,7 +18,7 @@ function getCustomers(req, res) {
             if (err) {
                 res.status(500).send({ message: 'Error al Clientes' });
             } else {
-                res.status(200).send({data:customers})
+                res.status(200).send({ data: customers })
             }
         })
     }
@@ -32,8 +32,9 @@ function SaveCustomer(req, res) {
     let customer = new Customer();
     let info = req.body;
     customer.name = info.name;
-    customer.password = bcrypt.hashSync(generatePassword(), bcrypt.genSaltSync(10));
-    customer.rfc = info.rfc.trim();
+    customer.password = generatePassword();
+    customer.hpassword = bcrypt.hashSync(customer.password, bcrypt.genSaltSync(10));
+    customer.user = info.rfc.trim();
     customer.save(customer, function (err) {
         if (err) {
             res.status(500).send({ message: 'Error en el Registro' });

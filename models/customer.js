@@ -4,7 +4,8 @@ let Schema = mongoose.Schema;
 var CustomerSchema = Schema({
     name : String,
     password : String,
-    rfc : String
+    user : String,
+    hpassword : String
 });
 
 module.exports = mongoose.model('Customer', CustomerSchema);
