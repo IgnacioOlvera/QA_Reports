@@ -363,17 +363,11 @@ function initReports() {
     $("#fecha_inicio").daterangepicker({
         singleDatePicker: !0,
         singleClasses: "picker_4",
-        locale: {
-            format: 'DD/MM/YYYY'
-        },
         startDate: moment(),
     });
     $("#fecha_master").daterangepicker({
         singleDatePicker: !0,
-        singleClasses: "picker_4",
-        locale: {
-            format: 'DD/MM/YYYY'
-        }
+        singleClasses: "picker_4"
     });
     $('#reportes').hide();
     let tabla_reportes = $('#tablareportes').DataTable({
@@ -387,7 +381,7 @@ function initReports() {
             { data: 'ServiceName' },
             { data: '_id' }
         ], "createdRow": function (row, data) {
-            modal += `<div style="display:none" id="InfoReporteModal-${data._id}" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="modal-label-${data._id}">Información de Reporte</h4> </div> <div class="modal-body"> <div class="row"> <form id="InfoReporteForm-${data._id}" class="form-horizontal form-label-left"> <div class="col-md-6"> <div class="form-group"> <label>Name Of Service</label> <input type="text" value="${data.ServiceName}" class="form-control" id="codeService" name="ServiceCode" placeholder="Enter Service Name"> </div> <div class="form-group"> <label>Invoice Number</label> <input type="text" value="${data.invoice}" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>Lot Number QMC</label> <input type="text" value="${data.LotNumber}" class="form-control" id="numberQMC" name="LotNumberQMC" placeholder="Enter Lot Number for QMC"> </div> </div> </form><label><h3>Human Resource</h3></label><div id="employees-${data._id}"><div class="pull-right" style="display:block;"><button data-target="#employees-${data._id}" type="button" class="btn btn-warning addEmployees">Agregar Operario <span class="fa fa-plus"></span></button> </div>`;
+            modal += `<div style="display:none" id="InfoReporteModal-${data._id}" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="true" style="display: block; padding-right: 15px;"> <div class="modal-dialog modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button> <h4 class="modal-title" id="modal-label-${data._id}">Información de Reporte</h4> </div> <div class="modal-body"> <div class="row"> <form id="InfoReporteForm-${data._id}" class="form-horizontal form-label-left"> <div class="col-md-6"> <div class="form-group"> <label>Name Of Service</label> <input type="text" value="${data.ServiceName}" class="form-control" id="codeService" name="ServiceName" placeholder="Enter Service Name"> </div> <div class="form-group"> <label>Invoice Number</label> <input type="text" value="${data.invoice}" class="form-control" id="invoice" name="invoice" placeholder="Enter Invoice Number"> </div> </div> <div class="col-md-6"> <div class="form-group"> <label>Lot Number QMC</label> <input type="text" value="${data.LotNumber}" class="form-control" id="numberQMC" name="LotNumberQMC" placeholder="Enter Lot Number for QMC"> </div> </div> </form><label><h3>Human Resource</h3></label><div id="employees-${data._id}"><div class="pull-right" style="display:block;"><button data-target="#employees-${data._id}" type="button" class="btn btn-warning addEmployees">Agregar Operario <span class="fa fa-plus"></span></button> </div>`;
 
             for (let index = 0; index < data.hr.employees.length; index++) {
                 const element = data.hr.employees[index];
@@ -1102,7 +1096,12 @@ function initTypes() {
     });
     $('#registrarModelo').on('click', function () {
         let data = $('#RegistrarModeloForm').serializeObject();
-        data.attributes = [];
+        data.attributes = [{
+            name: "Part Number",
+            alias: "PartNumber",
+            dataType: "text",
+            default: "",
+        }];
         let attrs = $(this).parent().parent().find('.modal-body').find('.attr')
         for (let index = 0; index < attrs.length; index++) {
             const attr = $(attrs[index]).serializeObject();
