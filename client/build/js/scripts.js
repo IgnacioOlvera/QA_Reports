@@ -742,7 +742,7 @@ function initReports() {
                                 extend: 'excel',
                                 text: 'Save as Excel'
                             }
-                        ]
+                        ], scrollX: true
                     });
                 },
                 failure: function (result) { },
