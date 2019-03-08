@@ -859,7 +859,7 @@ function initReports() {
                     log.values[$(field).attr('name')] = $(field).val();
                 }
                 data.data.push(log)
-
+                
             }
             if (data.length != 0) {
                 $.ajax({

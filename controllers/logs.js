@@ -15,9 +15,20 @@ function getLogs(req, res) {
 //Registrar Log
 function SaveLog(req, res) {
     let info = req.body.data;
+    for (let log = 0; log < info.length; log++) {
+        const element = info[log].values;
+        for (const key in element) {
+            if (parseInt(element[key])) {
+                element[key] = parseInt(element[key]);
+
+            }
+        }
+
+    }
     Log.insertMany(info, function (err) {
         if (err) {
-            res.status(500).send({ message: "Error en el Registro" })
+            throw err
+            // res.status(500).send({ message: "Error en el Registro" })
         } else {
             res.status(200).send({ message: "Registro Exitoso" });
         }
@@ -27,7 +38,7 @@ function SaveLog(req, res) {
 function UpdateLog(req, res) {
     let id = req.params.id;
     let info = req.body;
-    
+
     Log.findByIdAndUpdate(id, info, function (err) {
         if (err) {
             res.status(500).send({ message: "Error al Actualizar el Registro" })
